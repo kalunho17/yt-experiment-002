@@ -11,8 +11,9 @@ Kalun Ho · November 2026 · follows [Cheaper Tokens, Costlier Tasks](https://gi
 > comes from the card's cache, whether answers hold when the card is busy, and what the machine
 > draws at the wall.
 
-**Status:** harness and preregistration written; the measured runs are in `results/` once they
-have run. A private test bench, paid for privately, no sponsor. The card is a consumer GPU; the
+**Status:** measured on 2026-11-13 in one session of 6.7 hours (92 runs, no failed calls). The
+report is [results/RESULTS.md](results/RESULTS.md). Whole-machine power was not recorded live;
+the cost model uses the stated idle fallback. A private test bench, paid for privately, no sponsor. The card is a consumer GPU; the
 results describe this setup and the method, not a purchase recommendation.
 
 ## What is measured
