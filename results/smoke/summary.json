@@ -1,0 +1,463 @@
+{
+ "prices": {
+  "api": {
+   "Q": {
+    "input": 0.45,
+    "output": 0.65
+   },
+   "O": {
+    "input": 0.15,
+    "output": 0.25
+   }
+  },
+  "cached_input_factor": 0.25,
+  "machine_eur_gross": 5263.0,
+  "vat": 0.19,
+  "writeoff_years": 3,
+  "eur_per_kwh": 0.2366,
+  "staff_hours_per_month": 5.0,
+  "staff_hours_low": 1.0,
+  "eur_per_staff_hour": 45.0,
+  "working_days": 250,
+  "idle_w_fallback": 80.0
+ },
+ "conditions": {
+  "Q": {
+   "model": "Qwen3.8-27B",
+   "idle_w": 80.0,
+   "idle_w_measured": false,
+   "idle_gpu_util": 10.0,
+   "tasks": {
+    "T1": {
+     "name": "Sort a message (Banking77)",
+     "levels": [
+      {
+       "level": 1,
+       "runs": 1,
+       "passes": true,
+       "tasks_per_hour": 27302.8,
+       "good_share": 1.0,
+       "good_share_lenient": 1.0,
+       "accuracy": 0.7407,
+       "ref_accuracy": 0.74,
+       "gen_tok_s": 36.4,
+       "prompt_tok_s": 3396.5,
+       "ttft_p99": 0.0863,
+       "tpot_p99": 0.0158,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 88.0,
+       "kv_cache_usage_max": 0.0519,
+       "waiting_max": 0.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        27302.8
+       ]
+      },
+      {
+       "level": 64,
+       "runs": 1,
+       "passes": false,
+       "tasks_per_hour": 84242.1,
+       "good_share": 0.0,
+       "good_share_lenient": 0.0,
+       "accuracy": 0.7474,
+       "ref_accuracy": 0.73,
+       "gen_tok_s": 112.5,
+       "prompt_tok_s": 10522.8,
+       "ttft_p99": 2.4375,
+       "tpot_p99": 0.1679,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 100.0,
+       "kv_cache_usage_max": 0.8312,
+       "waiting_max": 42.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        84242.1
+       ]
+      }
+     ],
+     "operating_point": 1,
+     "tasks_per_hour_single": 27302.8,
+     "tasks_per_hour_operating": 27302.8,
+     "gain": 1.0,
+     "capacity_tasks_per_day": 655267.2,
+     "accuracy_single": 0.7407,
+     "accuracy_operating": 0.7407,
+     "prompt_tokens_per_task": 450.6697247706422,
+     "completion_tokens_per_task": 4.791612057667104,
+     "n_items": 763,
+     "cache_hit_share_operating": 0.0,
+     "wall_w_operating": null,
+     "gpu_util_single": 88.0,
+     "gpu_util_operating": 88.0,
+     "cost_hardware_only": {
+      "api_eur_per_task": 0.00020591592398427262,
+      "api_eur_per_task_cached_input": 5.381489187418087e-05,
+      "input_share_of_api_price": 0.9848746625456635,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 0.0,
+      "fixed_eur_per_working_day": 6.560155887507002,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 31858.419497503513,
+      "break_even_if_cached_input_quarter_price": 121902.2404215665
+     },
+     "cost_staff_low": {
+      "api_eur_per_task": 0.00020591592398427262,
+      "api_eur_per_task_cached_input": 5.381489187418087e-05,
+      "input_share_of_api_price": 0.9848746625456635,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 540.0,
+      "fixed_eur_per_working_day": 8.720155887507003,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 42348.137622290094,
+      "break_even_if_cached_input_quarter_price": 162039.82919625135
+     },
+     "cost_with_staff": {
+      "api_eur_per_task": 0.00020591592398427262,
+      "api_eur_per_task_cached_input": 5.381489187418087e-05,
+      "input_share_of_api_price": 0.9848746625456635,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 2700.0,
+      "fixed_eur_per_working_day": 17.360155887507005,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 84307.01012143643,
+      "break_even_if_cached_input_quarter_price": 322590.18429499073
+     },
+     "no_cache": [
+      {
+       "level": 1,
+       "tasks_per_hour": 27303.5,
+       "cache_hit_share": 0.0,
+       "good_share": 1.0,
+       "with_cache_tasks_per_hour": 27302.8
+      }
+     ]
+    },
+    "T2": {
+     "name": "Short answer (GSM8K)",
+     "levels": [
+      {
+       "level": 1,
+       "runs": 1,
+       "passes": true,
+       "tasks_per_hour": 359.4,
+       "good_share": 1.0,
+       "good_share_lenient": 1.0,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 66.7,
+       "prompt_tok_s": 10.9,
+       "ttft_p99": 0.0804,
+       "tpot_p99": 0.0149,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 100.0,
+       "kv_cache_usage_max": 0.0519,
+       "waiting_max": 0.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        359.4
+       ]
+      },
+      {
+       "level": 64,
+       "runs": 1,
+       "passes": false,
+       "tasks_per_hour": 10238.3,
+       "good_share": 0.2632,
+       "good_share_lenient": 0.2632,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 967.0,
+       "prompt_tok_s": 298.4,
+       "ttft_p99": 18.4267,
+       "tpot_p99": 0.0201,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 90.5,
+       "kv_cache_usage_max": 0.987,
+       "waiting_max": 45.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        10238.3
+       ]
+      }
+     ],
+     "operating_point": 1,
+     "tasks_per_hour_single": 359.4,
+     "tasks_per_hour_operating": 359.4,
+     "gain": 1.0,
+     "capacity_tasks_per_day": 8625.599999999999,
+     "accuracy_single": 1.0,
+     "accuracy_operating": 1.0,
+     "prompt_tokens_per_task": 103.61904761904762,
+     "completion_tokens_per_task": 341.984126984127,
+     "n_items": 63,
+     "cache_hit_share_operating": 0.0,
+     "wall_w_operating": null,
+     "gpu_util_single": 100.0,
+     "gpu_util_operating": 100.0,
+     "cost_hardware_only": {
+      "api_eur_per_task": 0.000268918253968254,
+      "api_eur_per_task_cached_input": 0.00023394682539682545,
+      "input_share_of_api_price": 0.173393106419901,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 0.0,
+      "fixed_eur_per_working_day": 6.560155887507002,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 24394.60985151805,
+      "break_even_if_cached_input_quarter_price": 28041.226361501293
+     },
+     "cost_staff_low": {
+      "api_eur_per_task": 0.000268918253968254,
+      "api_eur_per_task_cached_input": 0.00023394682539682545,
+      "input_share_of_api_price": 0.173393106419901,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 540.0,
+      "fixed_eur_per_working_day": 8.720155887507003,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 32426.790516557583,
+      "break_even_if_cached_input_quarter_price": 37274.093686527674
+     },
+     "cost_with_staff": {
+      "api_eur_per_task": 0.000268918253968254,
+      "api_eur_per_task_cached_input": 0.00023394682539682545,
+      "input_share_of_api_price": 0.173393106419901,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 2700.0,
+      "fixed_eur_per_working_day": 17.360155887507005,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 64555.513176715715,
+      "break_even_if_cached_input_quarter_price": 74205.56298663317
+     }
+    },
+    "T3": {
+     "name": "Agent question (invoice ledger)",
+     "levels": [
+      {
+       "level": 1,
+       "runs": 1,
+       "passes": true,
+       "tasks_per_hour": 359.2,
+       "good_share": 1.0,
+       "good_share_lenient": 1.0,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 62.5,
+       "prompt_tok_s": 797.8,
+       "ttft_p99": 0.3799,
+       "tpot_p99": 0.0149,
+       "cache_hit_share": 0.1961,
+       "wall_w": null,
+       "gpu_util": 98.2,
+       "kv_cache_usage_max": 0.0779,
+       "waiting_max": 0.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        359.2
+       ]
+      },
+      {
+       "level": 64,
+       "runs": 1,
+       "passes": false,
+       "tasks_per_hour": 538.6,
+       "good_share": 0.0,
+       "good_share_lenient": 0.0,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 543.5,
+       "prompt_tok_s": 4828.8,
+       "ttft_p99": 10.9283,
+       "tpot_p99": 0.0329,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 100.0,
+       "kv_cache_usage_max": 0.961,
+       "waiting_max": 49.0,
+       "preemptions": 16.0,
+       "tasks_per_hour_runs": [
+        538.6
+       ]
+      }
+     ],
+     "operating_point": 1,
+     "tasks_per_hour_single": 359.2,
+     "tasks_per_hour_operating": 359.2,
+     "gain": 1.0,
+     "capacity_tasks_per_day": 8620.8,
+     "accuracy_single": 1.0,
+     "accuracy_operating": 1.0,
+     "prompt_tokens_per_task": 3941.8333333333335,
+     "completion_tokens_per_task": 362.3333333333333,
+     "n_items": 6,
+     "cache_hit_share_operating": 0.1961,
+     "wall_w_operating": null,
+     "gpu_util_single": 98.2,
+     "gpu_util_operating": 98.2,
+     "cost_hardware_only": {
+      "api_eur_per_task": 0.0020093416666666667,
+      "api_eur_per_task_cached_input": 0.0006789729166666666,
+      "input_share_of_api_price": 0.8827891390629601,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 0.0,
+      "fixed_eur_per_working_day": 6.560155887507002,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 3264.8284740891095,
+      "break_even_if_cached_input_quarter_price": 9661.881536767733
+     },
+     "cost_staff_low": {
+      "api_eur_per_task": 0.0020093416666666667,
+      "api_eur_per_task_cached_input": 0.0006789729166666666,
+      "input_share_of_api_price": 0.8827891390629601,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 540.0,
+      "fixed_eur_per_working_day": 8.720155887507003,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 4339.807426565253,
+      "break_even_if_cached_input_quarter_price": 12843.15717675092
+     },
+     "cost_with_staff": {
+      "api_eur_per_task": 0.0020093416666666667,
+      "api_eur_per_task_cached_input": 0.0006789729166666666,
+      "input_share_of_api_price": 0.8827891390629601,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 2700.0,
+      "fixed_eur_per_working_day": 17.360155887507005,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 8639.723236469825,
+      "break_even_if_cached_input_quarter_price": 25568.259736683664
+     },
+     "no_cache": [
+      {
+       "level": 1,
+       "tasks_per_hour": 359.3,
+       "cache_hit_share": 0.0,
+       "good_share": 1.0,
+       "with_cache_tasks_per_hour": 359.2
+      }
+     ],
+     "repeat": [
+      {
+       "level": 1,
+       "tasks_per_hour": 359.2,
+       "first_pass_tasks_per_hour": 359.2
+      }
+     ]
+    },
+    "T4": {
+     "name": "Long solution (MATH-500 level 5)",
+     "levels": [
+      {
+       "level": 1,
+       "runs": 1,
+       "passes": true,
+       "tasks_per_hour": 179.6,
+       "good_share": 1.0,
+       "good_share_lenient": 1.0,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 66.8,
+       "prompt_tok_s": 7.6,
+       "ttft_p99": 0.074,
+       "tpot_p99": 0.0149,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 100.0,
+       "kv_cache_usage_max": 0.0519,
+       "waiting_max": 0.0,
+       "preemptions": 0.0,
+       "tasks_per_hour_runs": [
+        179.6
+       ]
+      },
+      {
+       "level": 64,
+       "runs": 1,
+       "passes": true,
+       "tasks_per_hour": 1436.3,
+       "good_share": 1.0,
+       "good_share_lenient": 1.0,
+       "accuracy": 1.0,
+       "ref_accuracy": 1.0,
+       "gen_tok_s": 1024.4,
+       "prompt_tok_s": 69.2,
+       "ttft_p99": 0.3703,
+       "tpot_p99": 0.0184,
+       "cache_hit_share": 0.0,
+       "wall_w": null,
+       "gpu_util": 100.0,
+       "kv_cache_usage_max": 1.0,
+       "waiting_max": 46.0,
+       "preemptions": 3.0,
+       "tasks_per_hour_runs": [
+        1436.3
+       ]
+      }
+     ],
+     "operating_point": 64,
+     "tasks_per_hour_single": 179.6,
+     "tasks_per_hour_operating": 1436.3,
+     "gain": 7.997216035634744,
+     "capacity_tasks_per_day": 34471.2,
+     "accuracy_single": 1.0,
+     "accuracy_operating": 1.0,
+     "prompt_tokens_per_task": 97.55555555555556,
+     "completion_tokens_per_task": 871.2222222222222,
+     "n_items": 9,
+     "cache_hit_share_operating": 0.0,
+     "wall_w_operating": null,
+     "gpu_util_single": 100.0,
+     "gpu_util_operating": 100.0,
+     "cost_hardware_only": {
+      "api_eur_per_task": 0.0006101944444444445,
+      "api_eur_per_task_cached_input": 0.0005772694444444445,
+      "input_share_of_api_price": 0.0719442800564483,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 0.0,
+      "fixed_eur_per_working_day": 6.560155887507002,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 10750.926933593666,
+      "break_even_if_cached_input_quarter_price": 11364.11419423108
+     },
+     "cost_staff_low": {
+      "api_eur_per_task": 0.0006101944444444445,
+      "api_eur_per_task_cached_input": 0.0005772694444444445,
+      "input_share_of_api_price": 0.0719442800564483,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 540.0,
+      "fixed_eur_per_working_day": 8.720155887507003,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 14290.782170995224,
+      "break_even_if_cached_input_quarter_price": 15105.867756259213
+     },
+     "cost_with_staff": {
+      "api_eur_per_task": 0.0006101944444444445,
+      "api_eur_per_task_cached_input": 0.0005772694444444445,
+      "input_share_of_api_price": 0.0719442800564483,
+      "machine_eur_per_year": 1474.2296918767506,
+      "idle_power_eur_per_year": 165.80928,
+      "staff_eur_per_year": 2700.0,
+      "fixed_eur_per_working_day": 17.360155887507005,
+      "energy_eur_per_task": 0.0,
+      "break_even_tasks_per_working_day": 28450.203120601454,
+      "break_even_if_cached_input_quarter_price": 30072.88200437174
+     }
+    }
+   }
+  }
+ }
+}

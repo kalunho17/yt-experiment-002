@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpu-break-even"
+version = "0.1.0"
+description = "Cost per task on an owned GPU against a per-token API: closed-loop load runs on any OpenAI-compatible server."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Kalun Ho" }]
+dependencies = []   # the harness uses the standard library only
+
+[project.optional-dependencies]
+power = ["tapo>=0.8"]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
