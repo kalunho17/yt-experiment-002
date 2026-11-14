@@ -8,7 +8,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from .config import CONFIGS, GOOD_SHARE, PRICES, TASK_NAMES
+from .config import CONFIGS, GOOD_SHARE, PRICES, RAMP_S, TASK_NAMES
+from .plug import power_per_run
 from .results_io import read_rows
 
 
@@ -72,7 +73,15 @@ def cost_model(tokens_in: float, tokens_out: float, config: str, idle_w: float, 
 def summarise(results: Path) -> dict:
     runs = read_rows(results / "runs.csv")
     items = read_rows(results / "items.csv")
-    out: dict = {"prices": PRICES, "conditions": {}}
+    # Runs without live power samples take the plug's exported readings (see plug.py).
+    exported = power_per_run(results, RAMP_S)
+    n_export = 0
+    for r in runs:
+        if _f(r.get("wall_w_mean")) is None and r["run_id"] in exported:
+            r["wall_w_mean"] = exported[r["run_id"]][0]
+            n_export += 1
+    out: dict = {"prices": PRICES, "wall_power_source": "plug export, one reading every 5 minutes"
+                 if n_export else "live samples", "conditions": {}}
     for config in CONFIGS:
         crun = [r for r in runs if r["config"] == config]
         if not crun:
@@ -144,6 +153,8 @@ def render(summary: dict) -> str:
         L += [f"## {cond['model']}", "",
               f"Idle, model loaded: {_n(cond['idle_w'], '{:.0f}')} W whole machine"
               + ("" if cond["idle_w_measured"] else " (**not measured here**: the plug's export of 2026-11-12)")
+              + (" (wall power: the plug's export, one reading every 5 minutes, so one or two readings a run)"
+                 if summary.get("wall_power_source", "").startswith("plug") else "")
               + f", GPU utilisation {_n(cond['idle_gpu_util'], '{:.0f}')}%.", ""]
         for task, t in cond["tasks"].items():
             L += [f"### {task} {t['name']}", "",

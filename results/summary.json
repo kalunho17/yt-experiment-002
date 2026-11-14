@@ -21,6 +21,7 @@
   "working_days": 250,
   "idle_w_fallback": 80.0
  },
+ "wall_power_source": "plug export, one reading every 5 minutes",
  "conditions": {
   "Q": {
    "model": "Qwen3.8-27B",
@@ -45,7 +46,7 @@
        "ttft_p99": 0.0912,
        "tpot_p99": 0.0157,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 600.0,
        "gpu_util": 88.4,
        "kv_cache_usage_max": 0.0519,
        "waiting_max": 0.0,
@@ -69,7 +70,7 @@
        "ttft_p99": 0.19965,
        "tpot_p99": 0.0509,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 719.0,
        "gpu_util": 97.6,
        "kv_cache_usage_max": 0.2078,
        "waiting_max": 0.0,
@@ -93,7 +94,7 @@
        "ttft_p99": 0.3143,
        "tpot_p99": 0.08399999999999999,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 739.0,
        "gpu_util": 98.9,
        "kv_cache_usage_max": 0.4156,
        "waiting_max": 1.5,
@@ -117,7 +118,7 @@
        "ttft_p99": 0.41775,
        "tpot_p99": 0.1151,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 742.0,
        "gpu_util": 99.85,
        "kv_cache_usage_max": 0.5973999999999999,
        "waiting_max": 1.5,
@@ -141,7 +142,7 @@
        "ttft_p99": 0.52785,
        "tpot_p99": 0.14565,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 741.5,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.75325,
        "waiting_max": 2.5,
@@ -165,7 +166,7 @@
        "ttft_p99": 1.08735,
        "tpot_p99": 0.16935,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 738.5,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.987,
        "waiting_max": 13.0,
@@ -189,7 +190,7 @@
        "ttft_p99": 2.46525,
        "tpot_p99": 0.16920000000000002,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 738.0,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.9091,
        "waiting_max": 45.5,
@@ -211,7 +212,7 @@
      "completion_tokens_per_task": 4.835286884173621,
      "n_items": 76442,
      "cache_hit_share_operating": 0.0,
-     "wall_w_operating": null,
+     "wall_w_operating": 739.0,
      "gpu_util_single": 88.4,
      "gpu_util_operating": 98.9,
      "cost_hardware_only": {
@@ -222,9 +223,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 0.0,
       "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 31849.236620837382,
-      "break_even_if_cached_input_quarter_price": 121820.44395339095
+      "energy_eur_per_task": 2.1546840236032226e-06,
+      "break_even_tasks_per_working_day": 32185.929957218217,
+      "break_even_if_cached_input_quarter_price": 126897.87408863792
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0002059752943408074,
@@ -234,9 +235,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 540.0,
       "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 42335.931187352035,
-      "break_even_if_cached_input_quarter_price": 161931.10038465456
+      "energy_eur_per_task": 2.1546840236032226e-06,
+      "break_even_tasks_per_working_day": 42783.484329361505,
+      "break_even_if_cached_input_quarter_price": 168680.32754427093
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0002059752943408074,
@@ -246,9 +247,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 2700.0,
       "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 84282.70945341063,
-      "break_even_if_cached_input_quarter_price": 322373.72610970895
+      "energy_eur_per_task": 2.1546840236032226e-06,
+      "break_even_tasks_per_working_day": 85173.70181793466,
+      "break_even_if_cached_input_quarter_price": 335810.14136680285
      },
      "no_cache": [
       {
@@ -291,7 +292,7 @@
        "ttft_p99": 0.08945,
        "tpot_p99": 0.0149,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 517.0,
        "gpu_util": 98.8,
        "kv_cache_usage_max": 0.0519,
        "waiting_max": 0.0,
@@ -315,7 +316,7 @@
        "ttft_p99": 0.1167,
        "tpot_p99": 0.0174,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 504.0,
        "gpu_util": 98.85,
        "kv_cache_usage_max": 0.2273,
        "waiting_max": 0.0,
@@ -339,7 +340,7 @@
        "ttft_p99": 0.1562,
        "tpot_p99": 0.0189,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 566.0,
        "gpu_util": 95.6,
        "kv_cache_usage_max": 0.8701,
        "waiting_max": 0.0,
@@ -363,7 +364,7 @@
        "ttft_p99": 2.9618,
        "tpot_p99": 0.01975,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 577.0,
        "gpu_util": 94.5,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 3.5,
@@ -387,7 +388,7 @@
        "ttft_p99": 6.049200000000001,
        "tpot_p99": 0.019799999999999998,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 585.5,
        "gpu_util": 94.15,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 9.0,
@@ -411,7 +412,7 @@
        "ttft_p99": 8.7408,
        "tpot_p99": 0.01985,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 583.0,
        "gpu_util": 93.15,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 14.0,
@@ -435,7 +436,7 @@
        "ttft_p99": 25.750799999999998,
        "tpot_p99": 0.01985,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 580.0,
        "gpu_util": 96.0,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 46.5,
@@ -457,7 +458,7 @@
      "completion_tokens_per_task": 403.43245216883304,
      "n_items": 6847,
      "cache_hit_share_operating": 0.0,
-     "wall_w_operating": null,
+     "wall_w_operating": 566.0,
      "gpu_util_single": 98.8,
      "gpu_util_operating": 95.6,
      "cost_hardware_only": {
@@ -468,9 +469,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 0.0,
       "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 21190.241581748443,
-      "break_even_if_cached_input_quarter_price": 23936.123050424638
+      "energy_eur_per_task": 1.513831327839069e-05,
+      "break_even_tasks_per_working_day": 22279.69450481584,
+      "break_even_if_cached_input_quarter_price": 25335.540590865694
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0003095838177303929,
@@ -480,9 +481,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 540.0,
       "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 28167.35044950289,
-      "break_even_if_cached_input_quarter_price": 31817.342136601736
+      "energy_eur_per_task": 1.513831327839069e-05,
+      "break_even_tasks_per_working_day": 29615.517152269793,
+      "break_even_if_cached_input_quarter_price": 33677.53255183211
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0003095838177303929,
@@ -492,9 +493,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 2700.0,
       "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 56075.78592052068,
-      "break_even_if_cached_input_quarter_price": 63342.21848131012
+      "energy_eur_per_task": 1.513831327839069e-05,
+      "break_even_tasks_per_working_day": 58958.80774208559,
+      "break_even_if_cached_input_quarter_price": 67045.50039569777
      }
     },
     "T3": {
@@ -514,7 +515,7 @@
        "ttft_p99": 0.33435000000000004,
        "tpot_p99": 0.0149,
        "cache_hit_share": 0.29390000000000005,
-       "wall_w": null,
+       "wall_w": 521.5,
        "gpu_util": 99.75,
        "kv_cache_usage_max": 0.0844,
        "waiting_max": 0.0,
@@ -538,7 +539,7 @@
        "ttft_p99": 0.4567,
        "tpot_p99": 0.021650000000000003,
        "cache_hit_share": 0.2659,
-       "wall_w": null,
+       "wall_w": 556.5,
        "gpu_util": 99.8,
        "kv_cache_usage_max": 0.2662,
        "waiting_max": 0.5,
@@ -562,7 +563,7 @@
        "ttft_p99": 0.8855500000000001,
        "tpot_p99": 0.03975,
        "cache_hit_share": 0.00575,
-       "wall_w": null,
+       "wall_w": 712.0,
        "gpu_util": 99.85,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 1.0,
@@ -586,7 +587,7 @@
        "ttft_p99": 2.4383,
        "tpot_p99": 0.04185,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 717.0,
        "gpu_util": 99.8,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 6.5,
@@ -610,7 +611,7 @@
        "ttft_p99": 4.2042,
        "tpot_p99": 0.042550000000000004,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 691.0,
        "gpu_util": 99.9,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 12.0,
@@ -634,7 +635,7 @@
        "ttft_p99": 5.2905999999999995,
        "tpot_p99": 0.0431,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 705.5,
        "gpu_util": 99.6,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 17.0,
@@ -658,7 +659,7 @@
        "ttft_p99": 14.8972,
        "tpot_p99": 0.04455,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 718.0,
        "gpu_util": 99.44999999999999,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 49.0,
@@ -680,7 +681,7 @@
      "completion_tokens_per_task": 381.9756097560976,
      "n_items": 3690,
      "cache_hit_share_operating": 0.00575,
-     "wall_w_operating": null,
+     "wall_w_operating": 712.0,
      "gpu_util_single": 99.75,
      "gpu_util_operating": 99.85,
      "cost_hardware_only": {
@@ -691,9 +692,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 0.0,
       "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 2787.54290800671,
-      "break_even_if_cached_input_quarter_price": 8469.53844734708
+      "energy_eur_per_task": 3.444149622259074e-05,
+      "break_even_tasks_per_working_day": 2828.944190190584,
+      "break_even_if_cached_input_quarter_price": 8863.669970296965
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0023533829268292685,
@@ -703,9 +704,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 540.0,
       "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 3705.3705914556535,
-      "break_even_if_cached_input_quarter_price": 11258.222643268206
+      "energy_eur_per_task": 3.444149622259074e-05,
+      "break_even_tasks_per_working_day": 3760.403679201872,
+      "break_even_if_cached_input_quarter_price": 11782.126096057897
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0023533829268292685,
@@ -715,9 +716,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 2700.0,
       "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 7376.681325251425,
-      "break_even_if_cached_input_quarter_price": 22412.959426952704
+      "energy_eur_per_task": 3.444149622259074e-05,
+      "break_even_tasks_per_working_day": 7486.241635247023,
+      "break_even_if_cached_input_quarter_price": 23455.950599101623
      },
      "no_cache": [
       {
@@ -765,7 +766,7 @@
        "ttft_p99": 0.09315,
        "tpot_p99": 0.015,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 527.5,
        "gpu_util": 99.7,
        "kv_cache_usage_max": 0.0909,
        "waiting_max": 0.0,
@@ -789,7 +790,7 @@
        "ttft_p99": 0.12975,
        "tpot_p99": 0.017349999999999997,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 513.5,
        "gpu_util": 99.9,
        "kv_cache_usage_max": 0.3247,
        "waiting_max": 0.0,
@@ -813,7 +814,7 @@
        "ttft_p99": 0.2459,
        "tpot_p99": 0.016849999999999997,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 558.5,
        "gpu_util": 99.2,
        "kv_cache_usage_max": 0.53895,
        "waiting_max": 0.0,
@@ -837,7 +838,7 @@
        "ttft_p99": 0.28755,
        "tpot_p99": 0.0176,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 571.0,
        "gpu_util": 99.25,
        "kv_cache_usage_max": 0.8247,
        "waiting_max": 0.0,
@@ -861,7 +862,7 @@
        "ttft_p99": 10.42755,
        "tpot_p99": 0.02355,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 584.0,
        "gpu_util": 98.5,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 3.0,
@@ -885,7 +886,7 @@
        "ttft_p99": 65.4562,
        "tpot_p99": 0.02645,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 585.0,
        "gpu_util": 99.35,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 18.5,
@@ -909,7 +910,7 @@
        "ttft_p99": 146.43804999999998,
        "tpot_p99": 0.031549999999999995,
        "cache_hit_share": 0.0,
-       "wall_w": null,
+       "wall_w": 588.0,
        "gpu_util": 99.1,
        "kv_cache_usage_max": 1.0,
        "waiting_max": 51.0,
@@ -931,7 +932,7 @@
      "completion_tokens_per_task": 1957.3792434529582,
      "n_items": 1031,
      "cache_hit_share_operating": 0.0,
-     "wall_w_operating": null,
+     "wall_w_operating": 571.0,
      "gpu_util_single": 99.7,
      "gpu_util_operating": 99.25,
      "cost_hardware_only": {
@@ -942,9 +943,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 0.0,
       "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 4905.808347602253,
-      "break_even_if_cached_input_quarter_price": 5091.201916682582
+      "energy_eur_per_task": 0.00010260607666490019,
+      "break_even_tasks_per_working_day": 5313.518674105445,
+      "break_even_if_cached_input_quarter_price": 5531.693211221863
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.001337222211445199,
@@ -954,9 +955,9 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 540.0,
       "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 6521.097101791871,
-      "break_even_if_cached_input_quarter_price": 6767.533444257527
+      "energy_eur_per_task": 0.00010260607666490019,
+      "break_even_tasks_per_working_day": 7063.050321352527,
+      "break_even_if_cached_input_quarter_price": 7353.061108742953
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.001337222211445199,
@@ -966,17 +967,17 @@
       "idle_power_eur_per_year": 165.80928,
       "staff_eur_per_year": 2700.0,
       "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 12982.252118550341,
-      "break_even_if_cached_input_quarter_price": 13472.859554557306
+      "energy_eur_per_task": 0.00010260607666490019,
+      "break_even_tasks_per_working_day": 14061.176910340851,
+      "break_even_if_cached_input_quarter_price": 14638.532698827312
      }
     }
    }
   },
   "O": {
    "model": "gpt-oss-20b",
-   "idle_w": 80.0,
-   "idle_w_measured": false,
+   "idle_w": 89.66666666666667,
+   "idle_w_measured": true,
    "idle_gpu_util": 0.09999999999999999,
    "tasks": {
     "T3": {
@@ -996,7 +997,7 @@
        "ttft_p99": 0.0887,
        "tpot_p99": 0.0037,
        "cache_hit_share": 0.82655,
-       "wall_w": null,
+       "wall_w": 585.5,
        "gpu_util": 94.35,
        "kv_cache_usage_max": 0.004200000000000001,
        "waiting_max": 0.0,
@@ -1020,7 +1021,7 @@
        "ttft_p99": 0.1276,
        "tpot_p99": 0.0063,
        "cache_hit_share": 0.8374,
-       "wall_w": null,
+       "wall_w": 594.0,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.0108,
        "waiting_max": 0.0,
@@ -1044,7 +1045,7 @@
        "ttft_p99": 0.1918,
        "tpot_p99": 0.0101,
        "cache_hit_share": 0.83685,
-       "wall_w": null,
+       "wall_w": 680.5,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.0338,
        "waiting_max": 0.0,
@@ -1068,7 +1069,7 @@
        "ttft_p99": 0.23465,
        "tpot_p99": 0.013,
        "cache_hit_share": 0.83735,
-       "wall_w": null,
+       "wall_w": 724.5,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.06515,
        "waiting_max": 0.0,
@@ -1092,7 +1093,7 @@
        "ttft_p99": 0.3176,
        "tpot_p99": 0.01815,
        "cache_hit_share": 0.83535,
-       "wall_w": null,
+       "wall_w": 727.0,
        "gpu_util": 100.0,
        "kv_cache_usage_max": 0.11795,
        "waiting_max": 0.0,
@@ -1114,7 +1115,7 @@
      "completion_tokens_per_task": 318.59985359685896,
      "n_items": 15027,
      "cache_hit_share_operating": 0.83535,
-     "wall_w_operating": null,
+     "wall_w_operating": 727.0,
      "gpu_util_single": 94.35,
      "gpu_util_operating": 100.0,
      "cost_hardware_only": {
@@ -1122,36 +1123,36 @@
       "api_eur_per_task_cached_input": 0.0002718788838424169,
       "input_share_of_api_price": 0.9061357670412549,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 185.844568,
       "staff_eur_per_year": 0.0,
-      "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 7730.876125885475,
-      "break_even_if_cached_input_quarter_price": 24128.964319675957
+      "fixed_eur_per_working_day": 6.6402970395070025,
+      "energy_eur_per_task": 3.7887372012222678e-06,
+      "break_even_tasks_per_working_day": 7860.414953170709,
+      "break_even_if_cached_input_quarter_price": 24768.89629365683
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0008485656451720236,
       "api_eur_per_task_cached_input": 0.0002718788838424169,
       "input_share_of_api_price": 0.9061357670412549,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 185.844568,
       "staff_eur_per_year": 540.0,
-      "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 10276.348019886227,
-      "break_even_if_cached_input_quarter_price": 32073.678412484845
+      "fixed_eur_per_working_day": 8.800297039507003,
+      "energy_eur_per_task": 3.7887372012222678e-06,
+      "break_even_tasks_per_working_day": 10417.303025772544,
+      "break_even_if_cached_input_quarter_price": 32825.8876716014
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0008485656451720236,
       "api_eur_per_task_cached_input": 0.0002718788838424169,
       "input_share_of_api_price": 0.9061357670412549,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 185.844568,
       "staff_eur_per_year": 2700.0,
-      "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.0,
-      "break_even_tasks_per_working_day": 20458.235595889233,
-      "break_even_if_cached_input_quarter_price": 63852.5347837204
+      "fixed_eur_per_working_day": 17.440297039507,
+      "energy_eur_per_task": 3.7887372012222678e-06,
+      "break_even_tasks_per_working_day": 20644.855316179885,
+      "break_even_if_cached_input_quarter_price": 65053.853183379666
      }
     }
    }
