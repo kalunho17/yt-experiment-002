@@ -49,7 +49,9 @@ def power_per_run(results: Path, ramp_s: float) -> dict[str, tuple[float, int]]:
     out = {}
     for run_id, (start, end) in run_windows(results / "samples.csv").items():
         # an idle stage starts while the card is still cooling down from the last run: skip a minute
-        lo = start + timedelta(seconds=60 if "idle" in run_id else ramp_s)
+        # (only the first of the three idle runs; the next ones follow without a gap)
+        skip = (60 if run_id.endswith("-r1") else 0) if "idle" in run_id else ramp_s
+        lo = start + timedelta(seconds=skip)
         vals = [w for t, w in readings if lo <= t <= end]
         if vals:
             out[run_id] = (sum(vals) / len(vals), len(vals))

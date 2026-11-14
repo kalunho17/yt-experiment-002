@@ -25,8 +25,8 @@
  "conditions": {
   "Q": {
    "model": "Qwen3.8-27B",
-   "idle_w": 80.0,
-   "idle_w_measured": false,
+   "idle_w": 85.0,
+   "idle_w_measured": true,
    "idle_gpu_util": 0.0,
    "tasks": {
     "T1": {
@@ -220,36 +220,36 @@
       "api_eur_per_task_cached_input": 5.3851025941236494e-05,
       "input_share_of_api_price": 0.9847411968276518,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 0.0,
-      "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 2.1546840236032226e-06,
-      "break_even_tasks_per_working_day": 32185.929957218217,
-      "break_even_if_cached_input_quarter_price": 126897.87408863792
+      "fixed_eur_per_working_day": 6.601608207507002,
+      "energy_eur_per_task": 2.138335889888479e-06,
+      "break_even_tasks_per_working_day": 32386.708758198904,
+      "break_even_if_cached_input_quarter_price": 127659.34630265701
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0002059752943408074,
       "api_eur_per_task_cached_input": 5.3851025941236494e-05,
       "input_share_of_api_price": 0.9847411968276518,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 540.0,
-      "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 2.1546840236032226e-06,
-      "break_even_tasks_per_working_day": 42783.484329361505,
-      "break_even_if_cached_input_quarter_price": 168680.32754427093
+      "fixed_eur_per_working_day": 8.761608207507003,
+      "energy_eur_per_task": 2.138335889888479e-06,
+      "break_even_tasks_per_working_day": 42983.413185183854,
+      "break_even_if_cached_input_quarter_price": 169428.59090886937
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0002059752943408074,
       "api_eur_per_task_cached_input": 5.3851025941236494e-05,
       "input_share_of_api_price": 0.9847411968276518,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 2700.0,
-      "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 2.1546840236032226e-06,
-      "break_even_tasks_per_working_day": 85173.70181793466,
-      "break_even_if_cached_input_quarter_price": 335810.14136680285
+      "fixed_eur_per_working_day": 17.401608207507,
+      "energy_eur_per_task": 2.138335889888479e-06,
+      "break_even_tasks_per_working_day": 85370.23089312363,
+      "break_even_if_cached_input_quarter_price": 336505.5693337188
      },
      "no_cache": [
       {
@@ -466,36 +466,36 @@
       "api_eur_per_task_cached_input": 0.0002740692748649043,
       "input_share_of_api_price": 0.15295606911175644,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 0.0,
-      "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 1.513831327839069e-05,
-      "break_even_tasks_per_working_day": 22279.69450481584,
-      "break_even_if_cached_input_quarter_price": 25335.540590865694
+      "fixed_eur_per_working_day": 6.601608207507002,
+      "energy_eur_per_task": 1.4982569314621242e-05,
+      "break_even_tasks_per_working_day": 22408.622648435394,
+      "break_even_if_cached_input_quarter_price": 25480.304724573274
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0003095838177303929,
       "api_eur_per_task_cached_input": 0.0002740692748649043,
       "input_share_of_api_price": 0.15295606911175644,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 540.0,
-      "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 1.513831327839069e-05,
-      "break_even_tasks_per_working_day": 29615.517152269793,
-      "break_even_if_cached_input_quarter_price": 33677.53255183211
+      "fixed_eur_per_working_day": 8.761608207507003,
+      "energy_eur_per_task": 1.4982569314621242e-05,
+      "break_even_tasks_per_working_day": 29740.567138200713,
+      "break_even_if_cached_input_quarter_price": 33817.282090557
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0003095838177303929,
       "api_eur_per_task_cached_input": 0.0002740692748649043,
       "input_share_of_api_price": 0.15295606911175644,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 2700.0,
-      "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 1.513831327839069e-05,
-      "break_even_tasks_per_working_day": 58958.80774208559,
-      "break_even_if_cached_input_quarter_price": 67045.50039569777
+      "fixed_eur_per_working_day": 17.401608207507,
+      "energy_eur_per_task": 1.4982569314621242e-05,
+      "break_even_tasks_per_working_day": 59068.34509726197,
+      "break_even_if_cached_input_quarter_price": 67165.19155449189
      }
     },
     "T3": {
@@ -689,36 +689,36 @@
       "api_eur_per_task_cached_input": 0.0007745588414634146,
       "input_share_of_api_price": 0.8944990449658873,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 0.0,
-      "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 3.444149622259074e-05,
-      "break_even_tasks_per_working_day": 2828.944190190584,
-      "break_even_if_cached_input_quarter_price": 8863.669970296965
+      "fixed_eur_per_working_day": 6.601608207507002,
+      "energy_eur_per_task": 3.4169016030956325e-05,
+      "break_even_tasks_per_working_day": 2846.4852581168843,
+      "break_even_if_cached_input_quarter_price": 8916.395094504483
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.0023533829268292685,
       "api_eur_per_task_cached_input": 0.0007745588414634146,
       "input_share_of_api_price": 0.8944990449658873,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 540.0,
-      "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 3.444149622259074e-05,
-      "break_even_tasks_per_working_day": 3760.403679201872,
-      "break_even_if_cached_input_quarter_price": 11782.126096057897
+      "fixed_eur_per_working_day": 8.761608207507003,
+      "energy_eur_per_task": 3.4169016030956325e-05,
+      "break_even_tasks_per_working_day": 3777.835311660023,
+      "break_even_if_cached_input_quarter_price": 11833.777162441944
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.0023533829268292685,
       "api_eur_per_task_cached_input": 0.0007745588414634146,
       "input_share_of_api_price": 0.8944990449658873,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 2700.0,
-      "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 3.444149622259074e-05,
-      "break_even_tasks_per_working_day": 7486.241635247023,
-      "break_even_if_cached_input_quarter_price": 23455.950599101623
+      "fixed_eur_per_working_day": 17.401608207507,
+      "energy_eur_per_task": 3.4169016030956325e-05,
+      "break_even_tasks_per_working_day": 7503.235525832576,
+      "break_even_if_cached_input_quarter_price": 23503.305434191778
      },
      "no_cache": [
       {
@@ -940,36 +940,36 @@
       "api_eur_per_task_cached_input": 0.001288527934044617,
       "input_share_of_api_price": 0.04855266585095658,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 0.0,
-      "fixed_eur_per_working_day": 6.560155887507002,
-      "energy_eur_per_task": 0.00010260607666490019,
-      "break_even_tasks_per_working_day": 5313.518674105445,
-      "break_even_if_cached_input_quarter_price": 5531.693211221863
+      "fixed_eur_per_working_day": 6.601608207507002,
+      "energy_eur_per_task": 0.00010156120826709061,
+      "break_even_tasks_per_working_day": 5342.572267416168,
+      "break_even_if_cached_input_quarter_price": 5561.74664726393
      },
      "cost_staff_low": {
       "api_eur_per_task": 0.001337222211445199,
       "api_eur_per_task_cached_input": 0.001288527934044617,
       "input_share_of_api_price": 0.04855266585095658,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 540.0,
-      "fixed_eur_per_working_day": 8.720155887507003,
-      "energy_eur_per_task": 0.00010260607666490019,
-      "break_even_tasks_per_working_day": 7063.050321352527,
-      "break_even_if_cached_input_quarter_price": 7353.061108742953
+      "fixed_eur_per_working_day": 8.761608207507003,
+      "energy_eur_per_task": 0.00010156120826709061,
+      "break_even_tasks_per_working_day": 7090.6245199712785,
+      "break_even_if_cached_input_quarter_price": 7381.511222875842
      },
      "cost_with_staff": {
       "api_eur_per_task": 0.001337222211445199,
       "api_eur_per_task_cached_input": 0.001288527934044617,
       "input_share_of_api_price": 0.04855266585095658,
       "machine_eur_per_year": 1474.2296918767506,
-      "idle_power_eur_per_year": 165.80928,
+      "idle_power_eur_per_year": 176.17236,
       "staff_eur_per_year": 2700.0,
-      "fixed_eur_per_working_day": 17.360155887507005,
-      "energy_eur_per_task": 0.00010260607666490019,
-      "break_even_tasks_per_working_day": 14061.176910340851,
-      "break_even_if_cached_input_quarter_price": 14638.532698827312
+      "fixed_eur_per_working_day": 17.401608207507,
+      "energy_eur_per_task": 0.00010156120826709061,
+      "break_even_tasks_per_working_day": 14082.83353019172,
+      "break_even_if_cached_input_quarter_price": 14660.569525323483
      }
     }
    }
