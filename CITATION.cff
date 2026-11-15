@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite it as below."
+title: "Count Your Tasks First: The Break-Even Between an Owned GPU and a Per-Token API, per Task Type, Under a Latency Constraint"
+type: software
+authors:
+  - family-names: Ho
+    given-names: Kalun
+version: 1.0.0
+date-released: 2026-11-14
+license: MIT
+repository-code: "https://github.com/kalunho17/yt-experiment-002"
+url: "https://kalunho.com/experiments/gpu-break-even/"
+keywords:
+  - large language models
+  - inference cost
+  - on-premise
+  - break-even
+  - goodput
+  - agents
+  - prefix caching
+preferred-citation:
+  type: report
+  title: "Count Your Tasks First: The Break-Even Between an Owned GPU and a Per-Token API, per Task Type, Under a Latency Constraint"
+  authors:
+    - family-names: Ho
+      given-names: Kalun
+  year: 2026
+  month: 11
+  url: "https://github.com/kalunho17/yt-experiment-002"

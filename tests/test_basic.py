@@ -74,3 +74,47 @@ def test_smoke_end_to_end_against_the_mock(tmp_path):
         assert (tmp_path / "items.csv").stat().st_size > 200
     finally:
         srv.terminate()
+
+
+def test_published_summary_recomputes_from_the_raw_rows():
+    """results/summary.json and results/numbers.json must equal what the raw files give today."""
+    import math
+    import sys
+
+    def same(a, b, path=""):
+        if isinstance(a, dict):
+            assert isinstance(b, dict) and a.keys() == b.keys(), path
+            for k in a:
+                same(a[k], b[k], f"{path}/{k}")
+        elif isinstance(a, list):
+            assert isinstance(b, list) and len(a) == len(b), path
+            for i, (x, y) in enumerate(zip(a, b)):
+                same(x, y, f"{path}[{i}]")
+        elif isinstance(a, float) or isinstance(b, float):
+            assert a is not None and b is not None and math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12), path
+        else:
+            assert a == b, path
+
+    results = ROOT / "results"
+    published = json.loads((results / "summary.json").read_text(encoding="utf-8"))
+    same(json.loads(json.dumps(summarise(results))), published)
+
+    sys.path.insert(0, str(ROOT / "analysis"))
+    before = (results / "numbers.json").read_text(encoding="utf-8")
+    subprocess.run([sys.executable, str(ROOT / "analysis" / "make_analysis.py")], check=True, capture_output=True)
+    same(json.loads((results / "numbers.json").read_text(encoding="utf-8")), json.loads(before))
+
+
+def test_headline_numbers_of_the_report():
+    """The numbers quoted in the README and the report's abstract."""
+    n = json.loads((ROOT / "results" / "numbers.json").read_text(encoding="utf-8"))
+    q = n["conditions"]["Q"]["tasks"]
+    assert n["overall"]["runs"] == 84 and n["overall"]["items"] == 131939 and n["overall"]["calls"] == 210054
+    assert [q[t]["operating_point"] for t in ("T1", "T2", "T3", "T4")] == [8, 16, 16, 12]
+    be = {t: round(q[t]["cost"]["hardware_only"]["break_even"]) for t in q}
+    assert be == {"T1": 32387, "T2": 22409, "T3": 2846, "T4": 5343}
+    assert round(q["T3"]["cost"]["staff_5h"]["break_even"]) == 7503
+    assert round(q["T3"]["tasks_per_hour_operating"]) == 4342 and round(q["T3"]["gain"], 1) == 8.0
+    assert max(abs(q[t]["accuracy_diff_op_minus_single"][0]) for t in q) < 0.05
+    assert [h["verdict"] for h in n["hypotheses"]] == ["partly supported", "not supported", "supported", "supported",
+                                                       "not supported"]
