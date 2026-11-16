@@ -47,7 +47,13 @@ break-even tasks per working day = fixed cost per working day ÷ (API price per 
 
 ```bash
 python analysis/cost.py --machine 9000 --years 4 --staff-hours 3 --input-price 0.20 --output-price 0.80
+python analysis/cost.py --machine 400000 --idle-watts 2900 --colocation-kw 12.5   # a server in a data centre
+python analysis/cost.py --examples   # illustrative, not measured: 8× B200 and 8× B300 servers on a coding workload
 ```
+
+The `--examples` servers (added 2026-11-16) apply the same formula to data-centre hardware with
+list prices, colocation and the token counts of a published coding-agent case study; every input
+and its source is in `data/server_examples.json`. They were not measured in this experiment.
 
 | Task | Tokens in / out | API price per task | Break-even, hardware only | + 5 staff hours a month | Card's capacity in 8 hours |
 |---|--:|--:|--:|--:|--:|

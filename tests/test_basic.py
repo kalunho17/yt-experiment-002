@@ -118,3 +118,23 @@ def test_headline_numbers_of_the_report():
     assert max(abs(q[t]["accuracy_diff_op_minus_single"][0]) for t in q) < 0.05
     assert [h["verdict"] for h in n["hypotheses"]] == ["partly supported", "not supported", "supported", "supported",
                                                        "not supported"]
+
+
+def test_server_examples_recompute_from_their_inputs():
+    """The illustrative data-centre servers (page, deck appendix): recomputed by hand from
+    data/server_examples.json, independently of make_analysis.break_even."""
+    x = json.loads((ROOT / "data" / "server_examples.json").read_text(encoding="utf-8"))
+    n = json.loads((ROOT / "results" / "numbers.json").read_text(encoding="utf-8"))["server_examples"]
+    fx, c, p = x["usd_per_eur"], x["coding_task"], x["api_usd_per_million"]
+    api = (c["new_input_tokens"] * p["input"] + c["cached_input_tokens"] * p["cached_input"]
+           + c["output_tokens"] * p["output"]) / c["commits"] / 1e6 / fx
+    expected = []
+    for s in x["servers"]:
+        fixed = (s["price_usd"] / fx / 3 + s["idle_kw"] * 8760 * 0.2366
+                 + s["colocation_kw"] * x["colocation_eur_per_kw_month"] * 12) / 250
+        expected.append((fixed / api, (fixed + 5 * 12 * 45 / 250) / api))
+    got = [(s["hardware_only"]["break_even"], s["staff_5h"]["break_even"]) for s in n["servers"]]
+    assert [tuple(round(v) for v in e) for e in expected] == [tuple(round(v) for v in g) for g in got]
+    # the figures on the page and in the deck appendix (s17 of ep-002)
+    assert [round(g[0]) for g in got] == [717, 879] and [round(g[1]) for g in got] == [728, 890]
+    assert round(api, 2) == 0.97

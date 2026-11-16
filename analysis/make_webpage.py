@@ -472,6 +472,15 @@ REFERENCES = [
     ("Qwen Team, Alibaba (2026). Qwen3.8-27B model card.", "https://huggingface.co/Qwen/Qwen3.8-27B", "13 November 2026"),
     ("OpenAI (2025). gpt-oss-20b model card.", "https://huggingface.co/openai/gpt-oss-20b", "13 November 2026"),
     ("NVIDIA (2025). License for Customer Use of GeForce Software.", "https://www.nvidia.com/en-us/drivers/geforce-license/", "13 November 2026"),
+    ("Z.ai (2026). GLM-5.3 model card.", "https://huggingface.co/zai-org/GLM-5.3", "16 November 2026"),
+    ("Z.ai (2026). Pricing.", "https://docs.z.ai/guides/overview/pricing", "16 November 2026"),
+    ("Peng, S.-W. et al. (2026). Inference Economics of Enterprise Coding Agents: A Case Study of Cloud vs. On-Premise LLMs.", "https://arxiv.org/abs/2607.13080", "11 November 2026"),
+    ("Supermicro (2026). 8U GPU SuperServer SYS-822GS-NB3RT (NVIDIA HGX B300 8-GPU), eStore.", "https://store.supermicro.com/us_en/8u-gpu-superserver-sys-822gs-nb3rt.html", "16 November 2026"),
+    ("Kennedy, P., ServeTheHome (2025). ASRock Rack 8U8X-GNR2 SYN B200 Review: NVIDIA HGX B200 8-GPU Server, power consumption.", "https://www.servethehome.com/asrock-rack-8u8x-gnr2-syn-b200-review-nvidia-hgx-b200-8-gpu-server-intel-xeon/5/", "16 November 2026"),
+    ("European Central Bank (2026). Euro foreign exchange reference rates (USD), 11 November 2026.", "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html", "11 November 2026"),
+    ("Exxact Corporation (2026). TensorEX 8U HGX B200 Server (TS4-142487900), configurator.", "https://configurator.exxactcorp.com/configure/TS4-142487900", "16 November 2026"),
+    ("NVIDIA (2026). NVIDIA DGX B300, specifications.", "https://www.nvidia.com/en-us/data-center/dgx-b300/", "16 November 2026"),
+    ("CBRE (2026). European data centre supply surges as growth expands beyond core markets. Press release, Global Data Center Trends 2026.", "https://www.cbre.co.uk/press-releases/european-data-centre-supply-surges-as-growth-expands-beyond-core-markets-finds-cbre-research", "16 November 2026"),
 ]
 
 VERDICT_PLAIN = {"supported": "Confirmed", "partly supported": "Partly confirmed", "not supported": "Not confirmed"}
@@ -617,6 +626,47 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         [[f"{PLAIN[t]}, {b['level']}", n0(b["with_cache_tasks_per_hour"]), n0(b["tasks_per_hour"]), f"×{b['ratio_with_over_without']:.2f}"]
          for t in ("T3", "T1") for b in T[t]["no_cache"]])
 
+    # Larger hardware, the same formula (added 2026-11-16): illustrative, from numbers["server_examples"],
+    # which make_analysis.py computes from data/server_examples.json. Rounded as in the deck appendix.
+    se = numbers["server_examples"]
+    sx, srv, tk = se["inputs"], se["servers"], se["tokens_per_task"]
+    P = numbers["prices"]
+    rtx = t3["cost"]
+    r1000 = lambda v: f"€{round(v, -3):,.0f}"
+    servers_tbl = table(
+        [("", ""), ("RTX 5090<br>measured", "num")]
+        + [(f"{s_['name'].replace(' server', '')}<br>illustrative", "num") for s_ in srv],
+        [["Hardware price, net", f"€{P['machine_eur_gross'] / (1 + P['vat']):,.0f}"] + [r1000(s_["price_eur"]) for s_ in srv],
+         ["Idle power at the wall", f"{q['idle_w']:.0f} W"] + [f"{s_['idle_kw']:.1f} kW" for s_ in srv],
+         ["Colocation a year", "none"] + [f"€{s_['hardware_only']['colocation_eur_per_year']:,.0f}" for s_ in srv],
+         ["Fixed cost per working day", f"€{rtx['hardware_only']['fixed_eur_per_working_day']:.2f}"]
+         + [f"€{s_['hardware_only']['fixed_eur_per_working_day']:,.0f}" for s_ in srv],
+         ["Model", "Qwen3.8-27B, 4-bit"] + ["GLM-5.3, 8-bit" for _ in srv],
+         ["Task", "agent question"] + ["coding task" for _ in srv],
+         ["API price per task", f"€{rtx['hardware_only']['api_eur_per_task']:.5f}"] + [f"€{s_['hardware_only']['api_eur_per_task']:.2f}" for s_ in srv],
+         ["<strong>Break-even, hardware only</strong>", f"<strong>{r50(rtx['hardware_only']['break_even'])}</strong>"]
+         + [f"<strong>{n0(s_['hardware_only']['break_even'])}</strong>" for s_ in srv],
+         ["With 5 staff hours a month", r50(rtx["staff_5h"]["break_even"])] + [n0(s_["staff_5h"]["break_even"]) for s_ in srv]])
+    c = sx["coding_task"]
+    servers_caption = (
+        f'Break-even per working day = (hardware price ÷ {P["writeoff_years"]} years + idle power × 8,760 hours × €{P["eur_per_kwh"]} per kWh + colocation a year) ÷ {P["working_days"]} working days ÷ API price per task. '
+        'The method is the same in every column; the inputs change, and so does the task: the card is priced per measured agent question, the servers per coding task. '
+        f'Servers: 8 B200 at ${srv[0]["price_usd"]:,.0f} as configured at Exxact [20], 8 B300 at ${srv[1]["price_usd"]:,.0f} starting price on Supermicro’s US store [17], at ${sx["usd_per_eur"]} per € [19], without import duty or VAT. '
+        f'Idle power: {srv[0]["idle_kw"]} kW as measured on an 8-GPU B200 server [18]; no B300 figure is published, so the B200 value stands in. '
+        f'Colocation: Frankfurt’s €{sx["colocation_eur_per_kw_month"]} per kW and month for 250 to 500 kW [22], a lower bound for a single server, for {srv[0]["colocation_kw"]:g} kW (the B200 server under full load [18]) and {srv[1]["colocation_kw"]:g} kW (DGX B300 [21]). '
+        f'Coding task: one commit of a published single-developer case study, GLM-5.1 and 5.2 on B200s [16]: {c["commits"]} commits, '
+        f'per commit {tk["new_input"]:,.0f} new input, {tk["cached_input"] / 1e6:.2f} million cached input and {tk["output"]:,.0f} output tokens, priced at Z.ai’s GLM-5.3 list price [15]. '
+        f'Not included: networking, electricity under load, and capacity: whether one server serves that many developers was not measured. '
+        '<code>python analysis/cost.py --examples</code> in the repository prints the same table.')
+    servers_block = (
+        '<div style="margin-top: var(--s5)">'
+        '<p class="kicker">Added 16 November 2026 · illustrative, not measured</p>'
+        '<h3>Larger hardware, the same formula</h3>'
+        f'<p>A coding agent on a large open model does not fit this card: GLM-5.3 has 753 billion parameters [14]. On data-centre servers the formula stays the same. '
+        f'The fixed cost per working day is {srv[0]["hardware_only"]["fixed_eur_per_working_day"] / rtx["hardware_only"]["fixed_eur_per_working_day"]:.0f} to {srv[1]["hardware_only"]["fixed_eur_per_working_day"] / rtx["hardware_only"]["fixed_eur_per_working_day"]:.0f} times the test machine’s, '
+        f'and at the API a coding task costs {srv[0]["hardware_only"]["api_eur_per_task"] / rtx["hardware_only"]["api_eur_per_task"]:.0f} times an agent question. Owning starts to pay at about {r10(srv[0]["hardware_only"]["break_even"])} to {r10(srv[1]["hardware_only"]["break_even"])} coding tasks a working day: '
+        f'about {srv[0]["developers"]:.0f} to {srv[1]["developers"]:.0f} developers who each make {se["commits_per_active_day"]:.0f} commits a day, as in the case study.</p>'
+        f'{servers_tbl}<p class="caption">{servers_caption}</p></div>')
     details = [f'<details open><summary>Cost and break-even: every task, both models</summary>{cost_tbl}<p class="caption">Break-even = fixed cost per working day ÷ (API price per task − electricity per task). API prices: Qwen3.8-27B €0.45 in and €0.65 out per million tokens, gpt-oss-20b €0.15 and €0.25 [1]. Capacity assumes the card runs at its limit for the whole period.</p></details>',
                f'<details><summary>What moves the agent break-even: 17 changes</summary>{sens_tbl}</details>',
                f'<details><summary>Quality under load, with ranges</summary>{acc_tbl}<p class="caption">The range is a 95 % interval for the difference of two independent shares. Every range includes zero.</p></details>']
@@ -697,6 +747,7 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
       <p class="cite">Break-even tasks per working day = cost of owning per working day ÷ (API price per task − electricity per task)</p>
       <div style="margin-top: var(--s4)">{inputs}</div>
       <div style="margin-top: var(--s4)">{teams}</div>
+      {servers_block}
       <ul class="bullets" style="margin-top: var(--s4)">
         <li><strong>Below the break-even:</strong> use the API. It costs nothing when nobody asks.</li>
         <li><strong>Above it:</strong> own, and fill the quiet hours with batch work, such as long documents at night.</li>
@@ -763,6 +814,7 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         <li><strong>List prices, no API run.</strong> The API side is a price list applied to the tokens my card counted. Its speed and its answers were not measured.</li>
         <li><strong>Even load.</strong> The test keeps a constant number of requests in flight. Real traffic comes in bursts, which lowers what a card can take.</li>
         <li><strong>Benchmarks stand in for work.</strong> The tasks have answer keys, real business tasks rarely do. The agent task is synthetic.</li>
+        <li><strong>Not a test of coding agents on large models.</strong> GLM-5.3, an open model built for coding agents, has 753 billion parameters [14]. At 4 bits its weights alone take about 380 GB, 12 times this card’s memory and more than five 80 GB data-centre cards hold, so owning it means a multi-card server. Its API costs more too: $1.40 per million input tokens, $0.26 cached, $4.40 output [15], against €0.45 and €0.65 here [1]. Coding agents send the same files again and again, so the cache price matters: in one case study, 99.3 % of the input came from cache and the API bill fell by 88.6 % [16]. The formula holds, but the fixed cost and the price per task both rise, so this break-even needs its own measurement.</li>
         <li><strong>A simple cost model.</strong> No cost of capital, no resale value, no spare machine, no room or cooling in the base case. The table under “Full results” shows what each would change.</li>
       </ul>
     </div>

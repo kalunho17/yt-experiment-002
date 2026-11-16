@@ -49,17 +49,44 @@ def read(path: Path):
 def break_even(tin: float, tout: float, *, p_in: float, p_out: float, machine_net: float, years: float,
                idle_w: float, eur_kwh: float, staff_h: float, eur_staff_h: float, days: float,
                op_w: float | None, tasks_h: float | None, cards: int = 1, resale_share: float = 0.0,
-               cached_factor: float = 1.0, capital_rate: float = 0.0) -> dict:
-    api = (tin * p_in * cached_factor + tout * p_out) / 1e6
+               cached_factor: float = 1.0, capital_rate: float = 0.0, tcached: float = 0.0,
+               p_cached: float = 0.0, colo_kw: float = 0.0, colo_eur_kw_month: float = 0.0) -> dict:
+    """tcached/p_cached: input tokens billed at a separate cache price (per 1M tokens), on top of tin.
+    colo_kw/colo_eur_kw_month: rack space and power capacity rented in a data centre (colocation)."""
+    api = (tin * p_in * cached_factor + tcached * p_cached + tout * p_out) / 1e6
     machine_year = cards * machine_net * (1 - resale_share) / years + cards * machine_net * capital_rate
     idle_year = cards * idle_w * 8760 / 1000 * eur_kwh
     staff_year = staff_h * 12 * eur_staff_h
-    fixed_day = (machine_year + idle_year + staff_year) / days
+    colo_year = cards * colo_kw * colo_eur_kw_month * 12
+    fixed_day = (machine_year + idle_year + staff_year + colo_year) / days
     energy = max(0.0, (op_w or idle_w) - idle_w) / tasks_h / 1000 * eur_kwh if tasks_h else 0.0
     be = fixed_day / (api - energy) if api > energy else float("inf")
     return {"api_eur_per_task": api, "energy_eur_per_task": energy, "fixed_eur_per_working_day": fixed_day,
             "machine_eur_per_year": machine_year, "idle_eur_per_year": idle_year, "staff_eur_per_year": staff_year,
-            "break_even": be}
+            "colocation_eur_per_year": colo_year, "break_even": be}
+
+
+def server_examples(path: Path) -> dict:
+    """Illustrative, not measured: the same formula on data-centre servers, per coding task.
+    Inputs and their sources: data/server_examples.json."""
+    x = json.loads(path.read_text(encoding="utf-8"))
+    fx, c, api = x["usd_per_eur"], x["coding_task"], x["api_usd_per_million"]
+    n = c["commits"]
+    tokens = {"new_input": c["new_input_tokens"] / n, "cached_input": c["cached_input_tokens"] / n, "output": c["output_tokens"] / n}
+    p = PRICES
+    rows = []
+    for s in x["servers"]:
+        kw = dict(p_in=api["input"] / fx, p_out=api["output"] / fx, tcached=tokens["cached_input"], p_cached=api["cached_input"] / fx,
+                  machine_net=s["price_usd"] / fx, years=p["writeoff_years"], idle_w=s["idle_kw"] * 1000, eur_kwh=p["eur_per_kwh"],
+                  eur_staff_h=p["eur_per_staff_hour"], days=p["working_days"], op_w=None, tasks_h=None,
+                  colo_kw=s["colocation_kw"], colo_eur_kw_month=x["colocation_eur_per_kw_month"])
+        hw = break_even(tokens["new_input"], tokens["output"], staff_h=0.0, **kw)
+        st = break_even(tokens["new_input"], tokens["output"], staff_h=p["staff_hours_per_month"], **kw)
+        nc = break_even(tokens["new_input"] + tokens["cached_input"], tokens["output"], staff_h=0.0, **{**kw, "tcached": 0.0})
+        rows.append({"name": s["name"], "price_usd": s["price_usd"], "price_eur": s["price_usd"] / fx, "idle_kw": s["idle_kw"],
+                     "colocation_kw": s["colocation_kw"], "hardware_only": hw, "staff_5h": st, "no_cache_break_even": nc["break_even"],
+                     "developers": hw["break_even"] / (n / c["active_days"])})
+    return {"inputs": x, "tokens_per_task": tokens, "commits_per_active_day": n / c["active_days"], "servers": rows}
 
 
 def base_inputs(config: str, idle_w: float) -> dict:
@@ -253,6 +280,9 @@ def main() -> None:
     ]
     out["sensitivity_agent"] = [{"case": n, "break_even": v, "vs_base": v / sens[0][1]} for n, v in sens]
 
+    # --- illustrative: the same formula on data-centre servers (added 2026-11-16) -------------------
+    out["server_examples"] = server_examples(HERE.parent / "data" / "server_examples.json")
+
     # --- hypotheses ---------------------------------------------------------------------------
     t2, t1, t4 = q["tasks"]["T2"], q["tasks"]["T1"], q["tasks"]["T4"]
     nc16 = next((x for x in t3["no_cache"] if x["level"] == t3["operating_point"]), None)
@@ -339,6 +369,19 @@ def render(o: dict) -> str:
           "| Case | Break-even, agent questions per working day | Against the base case |", "|---|--:|--:|"]
     for s in o["sensitivity_agent"]:
         L.append(f"| {s['case']} | {n0(s['break_even'])} | ×{s['vs_base']:.2f} |")
+    se = o["server_examples"]
+    tk = se["tokens_per_task"]
+    L += ["", "## Illustrative, not measured: the same formula on data-centre servers (added 2026-11-16)", "",
+          "Inputs and sources in `data/server_examples.json`. Task: one commit of a published coding-agent case study "
+          f"({n0(tk['new_input'])} new input, {n0(tk['cached_input'])} cached input, {n0(tk['output'])} output tokens), "
+          "priced at GLM-5.3's list price; colocation at a wholesale Frankfurt rate. Capacity was not measured.", "",
+          "| Server | Price, net | Idle | Colocation a year | Fixed per working day | API per coding task | Break-even, hardware only | With 5 staff hours | Without the API's cache | Developers at the study's pace |",
+          "|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|"]
+    for s in se["servers"]:
+        h = s["hardware_only"]
+        L.append(f"| {s['name']} | €{n0(s['price_eur'])} | {s['idle_kw']:.1f} kW | €{n0(h['colocation_eur_per_year'])} | "
+                 f"€{h['fixed_eur_per_working_day']:.2f} | €{h['api_eur_per_task']:.4f} | {n0(h['break_even'])} | "
+                 f"{n0(s['staff_5h']['break_even'])} | {n0(s['no_cache_break_even'])} | {s['developers']:.0f} |")
     for config, c in o["conditions"].items():
         L += ["", f"## Load levels: {c['model']}", "",
               f"Idle, model loaded: {c['idle_w']:.0f} W at the wall."]

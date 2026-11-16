@@ -339,6 +339,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 0.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 32386.708758198904
       },
       "staff_1h": {
@@ -348,6 +349,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 540.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 42983.413185183854
       },
       "staff_5h": {
@@ -357,6 +359,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 2700.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 85370.23089312363
       }
      },
@@ -748,6 +751,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 0.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 22408.622648435394
       },
       "staff_1h": {
@@ -757,6 +761,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 540.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 29740.567138200713
       },
       "staff_5h": {
@@ -766,6 +771,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 2700.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 59068.34509726197
       }
      },
@@ -1117,6 +1123,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 0.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 2846.4852581168843
       },
       "staff_1h": {
@@ -1126,6 +1133,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 540.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 3777.835311660023
       },
       "staff_5h": {
@@ -1135,6 +1143,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 2700.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 7503.235525832576
       }
      },
@@ -1526,6 +1535,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 0.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 5342.572267416168
       },
       "staff_1h": {
@@ -1535,6 +1545,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 540.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 7090.6245199712785
       },
       "staff_5h": {
@@ -1544,6 +1555,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 176.17236,
        "staff_eur_per_year": 2700.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 14082.83353019172
       }
      },
@@ -1828,6 +1840,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 185.844568,
        "staff_eur_per_year": 0.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 7860.414953170709
       },
       "staff_1h": {
@@ -1837,6 +1850,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 185.844568,
        "staff_eur_per_year": 540.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 10417.303025772544
       },
       "staff_5h": {
@@ -1846,6 +1860,7 @@
        "machine_eur_per_year": 1474.2296918767506,
        "idle_eur_per_year": 185.844568,
        "staff_eur_per_year": 2700.0,
+       "colocation_eur_per_year": 0.0,
        "break_even": 20644.855316179885
       }
      },
@@ -1983,6 +1998,117 @@
    "vs_base": 4.529219887438964
   }
  ],
+ "server_examples": {
+  "inputs": {
+   "_about": "Illustrative inputs, not measured in this experiment: the break-even formula of the report applied to data-centre servers on a coding workload. Read by analysis/make_analysis.py, which writes the results to results/numbers.json under server_examples. Added 2026-11-16.",
+   "usd_per_eur": 1.1127,
+   "usd_per_eur_source": "European Central Bank, euro reference rate of 2026-11-11",
+   "colocation_eur_per_kw_month": 225,
+   "colocation_source": "CBRE (2026), European data centre press release, Global Data Center Trends 2026: Frankfurt up to EUR 225 per kW and month for a 250-500 kW requirement; a lower bound for a single server",
+   "servers": [
+    {
+     "name": "8\u00d7 B200 server",
+     "price_usd": 447238.0,
+     "price_source": "Exxact TensorEX 8U HGX B200 Server (TS4-142487900), configured price, 2026-11-16: 8x HGX B200 180 GB, 2x EPYC 9554, 1,536 GB",
+     "idle_kw": 2.9,
+     "idle_source": "ServeTheHome (2025), ASRock Rack 8U8X-GNR2 SYN B200 review: just over 2.9 kW at idle with 10 NICs",
+     "colocation_kw": 12.5,
+     "colocation_kw_source": "the same B200 server under max load, just over 12.5 kW (ServeTheHome 2025)"
+    },
+    {
+     "name": "8\u00d7 B300 server",
+     "price_usd": 565151.02,
+     "price_source": "Supermicro eStore, SYS-822GS-NB3RT (8x HGX B300, 2.3 TB HBM3e), system starting price, 2026-11-16",
+     "idle_kw": 2.9,
+     "idle_source": "no B300 figure published; the B200 server's measured idle stands in (ServeTheHome 2025)",
+     "colocation_kw": 14.0,
+     "colocation_kw_source": "NVIDIA DGX B300 specifications: power consumption ~14 kW"
+    }
+   ],
+   "coding_task": {
+    "definition": "one non-merge commit",
+    "source": "Peng, Lin, Lee (2026), arXiv:2607.13080, period B (2026-06-08 to 2026-07-05): one developer, GLM-5.1 then GLM-5.2 in NVFP4 on a 4x B200 slice, Opencode",
+    "commits": 367,
+    "active_days": 20,
+    "new_input_tokens": 122472214,
+    "cached_input_tokens": 778058773,
+    "output_tokens": 5059772
+   },
+   "api_usd_per_million": {
+    "input": 1.4,
+    "cached_input": 0.26,
+    "output": 4.4
+   },
+   "api_source": "Z.ai pricing, GLM-5.3, read 2026-11-16",
+   "model": "GLM-5.3 (753B parameters, Z.ai model card), 8-bit"
+  },
+  "tokens_per_task": {
+   "new_input": 333711.75476839236,
+   "cached_input": 2120051.152588556,
+   "output": 13786.844686648501
+  },
+  "commits_per_active_day": 18.35,
+  "servers": [
+   {
+    "name": "8\u00d7 B200 server",
+    "price_usd": 447238.0,
+    "price_eur": 401939.4266199335,
+    "idle_kw": 2.9,
+    "colocation_kw": 12.5,
+    "hardware_only": {
+     "api_eur_per_task": 0.9697779032713465,
+     "energy_eur_per_task": 0.0,
+     "fixed_eur_per_working_day": 694.9615810932447,
+     "machine_eur_per_year": 133979.80887331118,
+     "idle_eur_per_year": 6010.5864,
+     "staff_eur_per_year": 0.0,
+     "colocation_eur_per_year": 33750.0,
+     "break_even": 716.6193194843217
+    },
+    "staff_5h": {
+     "api_eur_per_task": 0.9697779032713465,
+     "energy_eur_per_task": 0.0,
+     "fixed_eur_per_working_day": 705.7615810932447,
+     "machine_eur_per_year": 133979.80887331118,
+     "idle_eur_per_year": 6010.5864,
+     "staff_eur_per_year": 2700.0,
+     "colocation_eur_per_year": 33750.0,
+     "break_even": 727.7558899955371
+    },
+    "no_cache_break_even": 221.19542151484387,
+    "developers": 39.052823950099274
+   },
+   {
+    "name": "8\u00d7 B300 server",
+    "price_usd": 565151.02,
+    "price_eur": 507909.6072616159,
+    "idle_kw": 2.9,
+    "colocation_kw": 14.0,
+    "hardware_only": {
+     "api_eur_per_task": 0.9697779032713465,
+     "energy_eur_per_task": 0.0,
+     "fixed_eur_per_working_day": 852.4551552821546,
+     "machine_eur_per_year": 169303.20242053864,
+     "idle_eur_per_year": 6010.5864,
+     "staff_eur_per_year": 0.0,
+     "colocation_eur_per_year": 37800.0,
+     "break_even": 879.0210133748895
+    },
+    "staff_5h": {
+     "api_eur_per_task": 0.9697779032713465,
+     "energy_eur_per_task": 0.0,
+     "fixed_eur_per_working_day": 863.2551552821545,
+     "machine_eur_per_year": 169303.20242053864,
+     "idle_eur_per_year": 6010.5864,
+     "staff_eur_per_year": 2700.0,
+     "colocation_eur_per_year": 37800.0,
+     "break_even": 890.1575838861049
+    },
+    "no_cache_break_even": 271.32316738792275,
+    "developers": 47.903052499993976
+   }
+  ]
+ },
  "hypotheses": [
   {
    "id": "H1",
