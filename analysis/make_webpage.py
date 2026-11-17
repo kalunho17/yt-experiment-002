@@ -5,7 +5,9 @@
 
 Writes ``<site>/experiments/gpu-break-even/index.html``. The page chrome (head, header, footer) is
 taken from the site's first experiment page, so it stays identical to the rest of the site; the
-charts are inline SVG in the site's chart classes (``assets/css/site.css``). Figures in the prose
+charts are inline SVG in the site's chart classes (``assets/css/site.css``). The calculator under
+"Your own numbers" is the same formula in a few lines of inline JavaScript, with presets from
+``numbers.json``; its styles are the ``.calc`` block in ``site.css``. Figures in the prose
 are rounded as in the video (2,850, not 2,846); the tables under "Full results" are exact.
 Nothing is published by this script: the site is a git repository and the page goes live only
 when it is committed and pushed there.
@@ -356,7 +358,7 @@ def tile(n, value, label, note, title, paras, calc, bottom):
             <h3 id="{pid}-title">{title}</h3>
             {body}
             <div class="table-wrap"><table class="data-table"><tbody>{rows}</tbody></table></div>
-            <p class="explain__bottom">{bottom}</p>
+            {f'<p class="explain__bottom">{bottom}</p>' if bottom else ""}
           </div>
         </li>
 '''
@@ -370,50 +372,38 @@ def kpi_tiles(q, p):
     api = hw["api_eur_per_task"]
     tin, tout = t3["tokens"]["input"][0], t3["tokens"]["output"][0]
     op = next(x for x in t3["levels"] if x["level"] == t3["operating_point"])
-    nxt = next(x for x in t3["levels"] if x["level"] > t3["operating_point"])
-    machine_net = p["machine_eur_gross"] / (1 + p["vat"])
     staff_month = p["staff_hours_per_month"] * p["eur_per_staff_hour"]
     worst = max(T.values(), key=lambda t: abs(t["accuracy_diff_op_minus_single"][0]))
     return "".join([
         tile(1, r50(hw["break_even"]), "agent questions a working day",
              "From here an owned machine beats the API, with hardware and power only.",
              f"Below {r50(hw['break_even'])} agent questions a day, paying per token is cheaper than owning a machine.",
-             [f"An agent question is one that the AI answers by looking things up with tools, here in a set of invoices. A German cloud sells the same open model for €{p['api']['Q']['input']:.2f} per million tokens of input and €{p['api']['Q']['output']:.2f} per million of output. One agent question used {n0(tin)} tokens of input and {n0(tout)} of output on my card, so the cloud would charge €{api:.5f} for it: about a quarter of a cent.",
-              f"My machine cost €{n0(machine_net)} without VAT. Spread over 3 years that is €{n0(hw['machine_eur_per_year'])} a year. Standing ready all year with the model loaded, it draws {q['idle_w']:.0f} watts, which costs €{n0(hw['idle_eur_per_year'])} a year at €{p['eur_per_kwh']} per kWh. Together €{n0(hw['machine_eur_per_year'] + hw['idle_eur_per_year'])} a year, or €{hw['fixed_eur_per_working_day']:.2f} on each of 250 working days.",
-              f"Divide the machine’s €{hw['fixed_eur_per_working_day']:.2f} a day by the cloud’s quarter of a cent per question, and you get about {r50(hw['break_even'])}. Below that the cloud bill is smaller than the machine; above it, the machine wins. The extra electricity of answering is tiny (€{hw['energy_eur_per_task']:.5f} a question) and already counted.",
-              f"Example: a team of 50 people asking 20 agent questions each sends 1,000 a day. The cloud charges about €{api * 1000:.2f} for them; the machine costs €{hw['fixed_eur_per_working_day']:.2f} whether it is used or not."],
+             [f"A German cloud charges €{api:.5f} for one agent question ({n0(tin)} tokens in, {n0(tout)} out). My machine and its idle power cost €{hw['fixed_eur_per_working_day']:.2f} a working day. The lines cross where the two are equal."],
              [("Cloud price per agent question", f"€{api:.5f}"), ("Machine, per year (3 years)", f"€{n0(hw['machine_eur_per_year'])}"),
               ("Power when idle, per year", f"€{n0(hw['idle_eur_per_year'])}"), ("Machine and power, per working day", f"€{hw['fixed_eur_per_working_day']:.2f}"),
               ("Break-even: €" + f"{hw['fixed_eur_per_working_day']:.2f} ÷ €{api:.5f}", f"{n0(hw['break_even'])} a day")],
-             "Count your agent questions per working day. Below this line, keep paying per token."),
+             ""),
         tile(2, r50(st["break_even"]), "agent questions a day, with staff",
              f"5 hours of care a month cost €{st['fixed_eur_per_working_day'] - hw['fixed_eur_per_working_day']:.2f} a working day, more than the machine and its power (€{hw['fixed_eur_per_working_day']:.2f}). The break-even rises {st['break_even'] / hw['break_even']:.1f} times.",
              f"Count the people, and owning pays only from about {r50(st['break_even'])} agent questions a day.",
-             [f"A machine of your own needs someone to install updates, restart it when it hangs and check that it still works. My machine needs between 1 and 5 hours a month, and agents already do most of that work.",
-              f"At €{p['eur_per_staff_hour']:.0f} an hour, the German average labour cost, 5 hours cost €{n0(staff_month)} a month, or €{n0(st['staff_eur_per_year'])} a year. Over 250 working days that is €{st['fixed_eur_per_working_day'] - hw['fixed_eur_per_working_day']:.2f} a day, more than the €{hw['fixed_eur_per_working_day']:.2f} for the machine and its power.",
-              f"So owning now costs €{st['fixed_eur_per_working_day']:.2f} a working day. Divided by the cloud’s €{api:.5f} per question, the break-even becomes about {r50(st['break_even'])}, {st['break_even'] / hw['break_even']:.1f} times the figure without staff. With only 1 hour a month it is about {r50(s1['break_even'])}.",
-              "The cloud includes this work in its price. That is why staff time moves the line more than electricity or the price of the card."],
+             [f"Someone has to update, restart and watch the machine. Five hours a month at €{p['eur_per_staff_hour']:.0f} add €{st['fixed_eur_per_working_day'] - hw['fixed_eur_per_working_day']:.2f} a working day, more than the machine itself. With 1 hour it is about {r50(s1['break_even'])}."],
              [("Staff, 5 hours a month at €45", f"€{n0(staff_month)} a month"), ("Staff, per working day", f"€{st['fixed_eur_per_working_day'] - hw['fixed_eur_per_working_day']:.2f}"),
               ("Machine and power, per working day", f"€{hw['fixed_eur_per_working_day']:.2f}"), ("Owning in total, per working day", f"€{st['fixed_eur_per_working_day']:.2f}"),
               ("Break-even with 5 staff hours", f"{n0(st['break_even'])} a day"), ("Break-even with 1 staff hour", f"{n0(s1['break_even'])} a day")],
-             "Ask who will look after the machine and for how many hours. Put that into the calculation before the electricity price."),
+             ""),
         tile(3, r10(t3["tasks_per_hour_operating"]), "agent questions an hour on one card",
              f"{t3['gain']:.0f} times one request at a time, with no user waiting.",
              f"Working on {t3['operating_point']} questions at once, one card answers about {r10(t3['tasks_per_hour_operating'])} an hour.",
-             [f"A graphics card can work on many requests in the same pass. With one question at a time it answered {r10(t3['tasks_per_hour_single'])} agent questions an hour. With {t3['operating_point']} at once it answered {r10(t3['tasks_per_hour_operating'])}, {t3['gain']:.0f} times as many.",
-              f"The limit is the users’ patience. I counted a request as fast enough when the first word arrived within 2 seconds and the answer then flowed at 10 words a second or more, and I allowed only 1 call in 100 to be slower. At {t3['operating_point']} questions at once, {pc(op['good_share'])} of the calls were fast enough. At {nxt['level']} it was {pc(nxt['good_share'], 1)}, and the card did not answer any more questions: they only waited longer.",
-              f"In an 8-hour day that is about {r50(t3['capacity_per_8h'])} agent questions, {t3['capacity_over_break_even_8h']:.0f} times the break-even of {r50(hw['break_even'])}. It assumes the questions arrive evenly; real traffic comes in bursts."],
+             [f"With {t3['operating_point']} questions at once, {pc(op['good_share'])} of calls still got their first word within 2 seconds and then 10 words a second. Above that the card did no more work: requests only waited longer."],
              [("One question at a time", f"{n0(t3['tasks_per_hour_single'])} an hour"), (f"{t3['operating_point']} questions at once", f"{n0(t3['tasks_per_hour_operating'])} an hour"),
               ("Gain", f"×{t3['gain']:.1f}"), ("Calls fast enough, at the limit", pc(op["good_share"], 1)),
               ("In an 8-hour day", f"{n0(t3['capacity_per_8h'])}"), ("Capacity ÷ break-even, 8 hours", f"×{t3['capacity_over_break_even_8h']:.1f}")],
-             "One card is rarely too small for a team. The question is whether you have enough work to keep it busy."),
+             ""),
         tile(4, pc(t3["accuracy_operating"]), "correct under full load", "The same as with one request at a time. Load did not cost quality.",
              "A busy card answers as well as an idle one.",
-             [f"Every answer was checked against a fixed answer key, with no AI judging another AI. Under full load, with {t3['operating_point']} agent questions at once, the card answered {pc(t3['accuracy_operating'], 1)} of {n0(t3['accuracy_operating_n'])} questions correctly. With one question at a time it was {pc(t3['accuracy_single'], 1)} of {n0(t3['accuracy_single_n'])}.",
-              f"The other three tasks behaved the same way: under load, accuracy stayed within {abs(worst['accuracy_diff_op_minus_single'][0]) * 100:.1f} points of one request at a time. The largest drop, on {worst['short'].lower()}s, comes from a tiny sample at one request at a time ({worst['accuracy_single_n']} problems), and its uncertainty range includes zero.",
-              "This is expected: sharing the card between requests changes when the work is done, not what is computed. One limit: my card runs a compressed, 4-bit copy of the model, which I did not compare with the full-precision version a cloud may serve."],
+             [f"Every answer was checked against a fixed key: {pc(t3['accuracy_operating'], 1)} correct under full load, {pc(t3['accuracy_single'], 1)} one at a time. The other tasks stayed within {abs(worst['accuracy_diff_op_minus_single'][0]) * 100:.1f} points."],
              [(f"{PLAIN[k]}, one at a time → at the limit", f"{pc(t['accuracy_single'])} → {pc(t['accuracy_operating'])}") for k, t in ((k, T[k]) for k in TASKS)],
-             "Load does not cost quality. Test the compressed model on your own tasks before you rely on it."),
+             ""),
     ])
 
 
@@ -483,6 +473,165 @@ REFERENCES = [
     ("CBRE (2026). European data centre supply surges as growth expands beyond core markets. Press release, Global Data Center Trends 2026.", "https://www.cbre.co.uk/press-releases/european-data-centre-supply-surges-as-growth-expands-beyond-core-markets-finds-cbre-research", "16 November 2026"),
 ]
 
+# ---------------------------------------------------------------------------------------------
+# The calculator under "Your own numbers": the break-even formula of make_analysis.break_even,
+# in the browser. Presets come from numbers.json, so they reproduce the page's own figures.
+# Hidden without JavaScript; the static tables below it stay the record.
+# ---------------------------------------------------------------------------------------------
+NOUN = {"T1": "sorted messages", "T2": "short answers", "T3": "agent questions", "T4": "long solutions"}
+CALC_FIELDS = [  # name, label, step; the first block is always visible
+    ("Tokens per task", [("tin", "Input", "1"), ("tcached", "Cached input", "1"), ("tout", "Output", "1")]),
+    ("API price, € per million tokens", [("pin", "Input", "any"), ("pcached", "Cached input", "any"), ("pout", "Output", "any")]),
+    ("Owning", [("price", "Price of the machine, € net", "1"), ("staff", "Staff hours a month", "any")]),
+]
+CALC_MORE = [("years", "Write-off, years", "any"), ("machines", "Machines", "1"), ("idle", "Idle power per machine, W", "any"),
+             ("kwh", "Electricity, € per kWh", "any"), ("rent", "Data-centre rent per machine, € a year", "1"),
+             ("rate", "Staff cost, € an hour", "any"), ("days", "Working days a year", "1")]
+
+
+def calc_presets(numbers: dict) -> dict:
+    q, P, se = numbers["conditions"]["Q"], numbers["prices"], numbers["server_examples"]
+    common = dict(years=P["writeoff_years"], machines=1, kwh=P["eur_per_kwh"], staff=P["staff_hours_per_month"],
+                  rate=P["eur_per_staff_hour"], days=P["working_days"])
+    presets = {}
+    for t in TASKS:
+        tk = q["tasks"][t]
+        presets[t.lower()] = dict(
+            common, label=f"RTX 5090, {PLAIN[t].lower()} (measured)", noun=NOUN[t], kind="measured",
+            tin=round(tk["tokens"]["input"][0], 1), tcached=0, tout=round(tk["tokens"]["output"][0], 1),
+            pin=P["api"]["Q"]["input"], pcached=0, pout=P["api"]["Q"]["output"],
+            price=round(P["machine_eur_gross"] / (1 + P["vat"]), 2), idle=q["idle_w"], rent=0,
+            energy=max(0.0, tk["wall_w_operating"] - q["idle_w"]) / tk["tasks_per_hour_operating"] / 1000,
+            cap=round(tk["capacity_per_8h"]))
+    fx, api, tok = se["inputs"]["usd_per_eur"], se["inputs"]["api_usd_per_million"], se["tokens_per_task"]
+    for i, s in enumerate(se["servers"]):
+        presets[f"s{i + 1}"] = dict(
+            common, label=f"{s['name']}, coding task (illustrative)", noun="coding tasks", kind="illustrative",
+            tin=round(tok["new_input"], 1), tcached=round(tok["cached_input"], 1), tout=round(tok["output"], 1),
+            pin=round(api["input"] / fx, 6), pcached=round(api["cached_input"] / fx, 6), pout=round(api["output"] / fx, 6),
+            price=round(s["price_eur"], 2), idle=s["idle_kw"] * 1000, rent=round(s["hardware_only"]["colocation_eur_per_year"], 2),
+            energy=0, cap=None)
+    return presets
+
+
+CALC_JS = r"""
+(function () {
+  var root = document.getElementById('calculator');
+  if (!root) return;
+  var PRESETS = __PRESETS__;
+  var KEYS = __KEYS__;
+  var form = root.querySelector('form'), el = form.elements;
+  var out = function (name) { return root.querySelector('[data-out="' + name + '"]'); };
+  var nf = new Intl.NumberFormat('en-GB');
+  function r50(v) {  // as in the page and the video: 50s below 10,000, 100s above, 10s below 1,000
+    var step = v < 100 ? 1 : v < 1000 ? 10 : v < 10000 ? 50 : 100;
+    return Math.round(v / step) * step;
+  }
+  function eur(v) {
+    if (v >= 100) return '€' + nf.format(Math.round(v));
+    if (v >= 0.1) return '€' + v.toFixed(2);
+    return '€' + Number(v.toPrecision(3));
+  }
+  function preset() { return PRESETS[el.preset.value] || PRESETS[Object.keys(PRESETS)[0]]; }
+  function fill(p) { KEYS.forEach(function (k) { el[k].value = p[k]; }); }
+  function read() {
+    var v = {}, ok = true;
+    KEYS.concat('tasks').forEach(function (k) { v[k] = parseFloat(el[k].value); if (!(v[k] >= 0)) ok = false; });
+    if (!(v.years > 0 && v.days > 0 && v.machines >= 1)) ok = false;
+    return ok ? v : null;
+  }
+  function render(share) {
+    var p = preset(), v = read();
+    if (!v) { out('be').textContent = '–'; out('rest').textContent = 'Check the inputs: every field needs a number, and years, days and machines must be above zero.';
+      ['verdict', 'parts', 'capacity'].forEach(function (k) { out(k).textContent = ''; }); return; }
+    var api = (v.tin * v.pin + v.tcached * v.pcached + v.tout * v.pout) / 1e6;
+    var hw = v.machines * (v.price / v.years + v.idle * 8.76 * v.kwh + v.rent) / v.days;
+    var own = hw + v.staff * 12 * v.rate / v.days;
+    var energy = p.energy * v.kwh, margin = api - energy;
+    var be = margin > 0 ? own / margin : Infinity, beHw = margin > 0 ? hw / margin : Infinity;
+    out('be').textContent = isFinite(be) ? nf.format(r50(be)) : 'Never';
+    out('rest').innerHTML = !isFinite(be) ? 'Per task, the electricity costs more than the API charges.'
+      : v.staff > 0 ? p.noun + ' a working day, with your staff hours. Hardware and power alone: <strong>' + nf.format(r50(beHw)) + '</strong>.'
+      : p.noun + ' a working day, for hardware and power alone.';
+    var apiDay = v.tasks * api, ownDay = own + v.tasks * energy, n = nf.format(v.tasks) + ' ' + p.noun;
+    out('verdict').textContent = ownDay < apiDay
+      ? 'At ' + n + ' a day, owning is cheaper: ' + eur(ownDay) + ' a day, against ' + eur(apiDay) + ' at the API.'
+      : 'At ' + n + ' a day, the API is cheaper: ' + eur(apiDay) + ' a day, against ' + eur(ownDay) + ' for owning.';
+    out('parts').textContent = 'Owning costs ' + eur(own) + ' a working day, whether it works or waits. The API charges ' + eur(api) + ' a task.';
+    var cap = p.cap, need = cap ? Math.ceil(v.tasks / cap) : 0;
+    out('capacity').textContent = !cap
+      ? 'Capacity: not measured. Whether one server finishes ' + n + ' a day is open, and its prices are list prices.'
+      : need <= v.machines ? 'Capacity: the test card finishes about ' + nf.format(r50(cap)) + ' ' + p.noun + ' in an 8-hour day, measured.'
+      : 'Capacity: one test card finishes about ' + nf.format(r50(cap)) + ' ' + p.noun + ' in an 8-hour day. For ' + n + ' you need ' + need + ' machines, or longer days. Set the machines under “More assumptions”.';
+    if (!share) return;  // the address bar changes only once the visitor changes a number
+    var q = new URLSearchParams();
+    q.set('preset', el.preset.value); q.set('tasks', el.tasks.value);
+    KEYS.forEach(function (k) { if (parseFloat(el[k].value) !== p[k]) q.set(k, el[k].value); });
+    try { history.replaceState(null, '', '?' + q + '#calculator'); } catch (e) {}
+  }
+  var params = new URLSearchParams(location.search);
+  if (PRESETS[params.get('preset')]) el.preset.value = params.get('preset');
+  fill(preset());
+  KEYS.concat('tasks').forEach(function (k) { if (params.has(k)) el[k].value = params.get(k); });
+  if (KEYS.some(function (k) { return params.has(k) && parseFloat(params.get(k)) !== preset()[k]; })) document.getElementById('calc-more').open = true;
+  el.preset.addEventListener('change', function () { fill(preset()); render(true); });
+  form.addEventListener('input', function (e) { if (e.target !== el.preset) render(true); });
+  form.addEventListener('submit', function (e) { e.preventDefault(); });
+  root.querySelector('[data-copy]').addEventListener('click', function () {
+    var b = this;
+    navigator.clipboard.writeText(location.href).then(function () { b.textContent = 'Link copied'; },
+      function () { b.textContent = 'Copy the address bar instead'; });
+    setTimeout(function () { b.textContent = 'Copy a link to these numbers'; }, 2500);
+  });
+  root.hidden = false;
+  render();
+}());
+"""
+
+
+def calculator(numbers: dict) -> str:
+    presets = calc_presets(numbers)
+    first = presets["t3"]
+    keys = [k for _, fs in CALC_FIELDS for k, _, _ in fs] + [k for k, _, _ in CALC_MORE]
+
+    def field(k, label, step):
+        return (f'<label>{label}<input name="{k}" type="number" inputmode="decimal" min="0" step="{step}" '
+                f'value="{first[k]:g}"></label>')
+
+    options = "".join(f'<option value="{k}"{" selected" if k == "t3" else ""}>{esc(p["label"])}</option>' for k, p in presets.items())
+    blocks = "".join(f'<fieldset><legend>{legend}</legend><div class="calc__row">{"".join(field(*f) for f in fs)}</div></fieldset>'
+                     for legend, fs in CALC_FIELDS)
+    more = f'<details id="calc-more"><summary>More assumptions</summary><div class="calc__row">{"".join(field(*f) for f in CALC_MORE)}</div></details>'
+    js = (CALC_JS.replace("__PRESETS__", json.dumps(presets, ensure_ascii=False, separators=(",", ":")))
+                 .replace("__KEYS__", json.dumps(keys)).strip())
+    return f'''<div class="calc" id="calculator" hidden>
+        <h3>Put in your own numbers.</h3>
+        <p class="calc__intro">Start from a measured task or an illustrative server, then change what is different for you. The table below says where to find each number.</p>
+        <div class="calc__grid">
+          <form class="calc__form" novalidate>
+            <div class="calc__row">
+              <label>Start from<select name="preset">{options}</select></label>
+              <label>Tasks a working day<input name="tasks" type="number" inputmode="decimal" min="0" step="1" value="1000"></label>
+            </div>
+            {blocks}
+            {more}
+          </form>
+          <div class="calc__result">
+            <p class="kicker">Owning pays from</p>
+            <p class="calc__big" data-out="be"></p>
+            <p data-out="rest"></p>
+            <p class="calc__verdict" data-out="verdict" aria-live="polite"></p>
+            <p data-out="parts"></p>
+            <p data-out="capacity"></p>
+            <button class="btn btn--outline btn--small" type="button" data-copy>Copy a link to these numbers</button>
+          </div>
+        </div>
+      </div>
+      <script>
+{js}
+      </script>'''
+
+
 VERDICT_PLAIN = {"supported": "Confirmed", "partly supported": "Partly confirmed", "not supported": "Not confirmed"}
 HYP_PLAIN = {
     "H1": ("Under load, one card does at least 10 times the work of one request at a time.", "11 times for short answers, 8 times for agent questions."),
@@ -503,8 +652,6 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
     be = {t: T[t]["cost"]["hardware_only"]["break_even"] for t in T}
     bes = {t: T[t]["cost"]["staff_5h"]["break_even"] for t in T}
     fixed = t3["cost"]["hardware_only"]["fixed_eur_per_working_day"]
-    fixed_staff = t3["cost"]["staff_5h"]["fixed_eur_per_working_day"]
-    api3 = t3["cost"]["hardware_only"]["api_eur_per_task"]
     sens = {s["case"]: s for s in numbers["sensitivity_agent"]}
     cache_lo, cache_op = t3["levels"][0]["cache_hit_share"], next(x for x in t3["levels"] if x["level"] == t3["operating_point"])["cache_hit_share"]
     ocache = next(x for x in ot3["levels"] if x["level"] == ot3["operating_point"])["cache_hit_share"]
@@ -519,48 +666,42 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
     legend_b = lambda a, b: f'<ul class="chart-legend"><li><i class="is-b"></i>{a}</li><li><i class=""></i>{b}</li></ul>'  # noqa: E731
     findings = "".join([
         finding("break-even", "Finding 1 · The break-even", f"Owning pays from about {r50(be['T3'])} agent questions a working day.",
-                [f"An API bills every question. A machine of your own costs the same every day, whether it works or waits. So the two lines cross at a number of tasks a day, and below that number the API is cheaper.",
-                 f"For an agent question, one that looks things up with tools, the API charges about a quarter of a cent (€{api3 * 100:.2f} per 100). My test machine costs €{fixed:.2f} per working day for the hardware and its power. The lines cross at {r50(be['T3'])} questions a day.",
-                 f"Then count the people. My machine needs between 1 and 5 hours of care a month. At €45 an hour, 5 hours add €{fixed_staff - fixed:.2f} a working day, more than the hardware itself, and the crossing moves to {r50(bes['T3'])}."],
+                ["An API bills every question. A machine you own costs the same every day, busy or idle. So the two lines cross at a number of tasks a day.",
+                 f"An agent question, one that looks things up with tools, costs about a quarter of a cent at the API. My machine and its power cost €{fixed:.2f} a working day, so the lines cross at {r50(be['T3'])}. Add 5 hours of care a month at €45, and they cross at {r50(bes['T3'])}."],
                 "Count your tasks per working day before you compare prices per token.",
                 slide(1, f"The lines cross at {r50(be['T3'])} agent questions a day, {r50(bes['T3'])} with staff.",
                       "Cost per working day (€), agent questions on Qwen3.8-27B: German cloud at list price against one owned machine",
                       chart_break_even(q), SRC_PRICE)),
         finding("by-task", "Finding 2 · By task", "Agents reach the line first. A team’s chat never does.",
-                [f"The break-even depends on what the API charges for one task. An agent question is expensive at the API, because the agent sends its whole context again at every step: {pc(t3['input_share_of_api_price'])} of its price is input. So owning pays from {r50(be['T3'])} a day.",
-                 f"A short answer costs the API about an eighth of that. Owning needs {r50(be['T2'])} short answers a day to pay, and {r50(be['T1'])} sorted messages. Long worked solutions sit in between at {r50(be['T4'])}.",
-                 "As an illustration: a team of 50 people asking 20 short questions each sends 1,000 a day, a twentieth of what owning needs. 250 people with 20 agent questions each send 5,000: above the line with hardware only, below it once staff is counted."],
+                [f"What decides is the API’s price for one task. An agent sends its whole context again at every step, so {pc(t3['input_share_of_api_price'])} of its price is input, and owning pays from {r50(be['T3'])} a day.",
+                 f"Short answers need {r50(be['T2'])} a day, sorted messages {r50(be['T1'])}, long solutions {r50(be['T4'])}. A team of 50 asking 20 short questions each sends 1,000 a day: a twentieth of the line."],
                 "Compare each kind of task with its own break-even. One number for “AI usage” hides the answer.",
                 slide(2, f"Owning needs {r50(be['T3'])} agent questions a day, or {r50(be['T2'])} short answers.",
                       "Tasks per working day from which the owned machine is cheaper than the API (hardware and power only; with 5 staff hours a month beside it)",
                       chart_by_task(q), SRC_PRICE)),
         finding("capacity", "Finding 3 · Capacity", f"One card does up to {t2['gain']:.0f} times the work of one request at a time.",
-                [f"A graphics card can work on many requests in the same pass. I raised the load until users would start to wait: the first word within 2 seconds, then at least 10 words a second, for 99 % of calls.",
-                 f"Inside that limit the card finished {r10(t3['tasks_per_hour_operating'])} agent questions an hour with {t3['operating_point']} agents at once, against {r10(t3['tasks_per_hour_single'])} with one at a time. In an 8-hour day that is about {r50(t3['capacity_per_8h'])} questions, {t3['capacity_over_break_even_8h']:.0f} times the break-even.",
-                 f"For long solutions the margin is thin: the card finishes about {r50(t4['capacity_per_8h'])} in 8 hours, against a break-even of {r50(be['T4'])}. That only pays if the machine also works at night."],
+                ["A graphics card can work on many requests in one pass. I raised the load until users would start to wait: the first word within 2 seconds, then 10 words a second, for 99 % of calls.",
+                 f"At that limit the card finished {r10(t3['tasks_per_hour_operating'])} agent questions an hour, against {r10(t3['tasks_per_hour_single'])} one at a time: about {r50(t3['capacity_per_8h'])} in an 8-hour day, {t3['capacity_over_break_even_8h']:.0f} times the break-even. Long solutions are tight: {r50(t4['capacity_per_8h'])} in 8 hours against a break-even of {r50(be['T4'])}."],
                 "Capacity is rarely the problem. Check it for long answers, and plan work for the quiet hours.",
                 slide(3, f"At the waiting limit the card answers {r10(t3['tasks_per_hour_operating'])} agent questions an hour.",
                       "Tasks finished per hour on one card, Qwen3.8-27B. Bars are scaled within each task",
                       chart_capacity(q), SRC, legend_b("One request at a time", "As many at once as the waiting limit allows"))),
         finding("quality", "Finding 4 · Quality", "A busy card answers as well as an idle one.",
-                [f"The worry is obvious: if the card shares its work across many requests, answers could get worse. Every answer was scored against a fixed key, {ov['items']:,} in total, with no AI judging another AI.",
-                 f"Under load the card answered {pc(t3['accuracy_operating'])} of the agent questions correctly, against {pc(t3['accuracy_single'])} with one at a time. On all four tasks the difference stayed within {max_diff:.1f} points, and the two small drops come from tiny samples at one request at a time ({t4['accuracy_single_n']} long solutions).",
-                 "One limit: my card runs a compressed, 4-bit copy of the model. I did not compare it with the full-precision version a cloud may serve."],
+                [f"If the card shares its work across many requests, answers could get worse. I scored all {ov['items']:,} answers against a fixed key, with no AI judging another AI.",
+                 f"Under load the card answered {pc(t3['accuracy_operating'])} of the agent questions correctly, against {pc(t3['accuracy_single'])} one at a time. On all four tasks the gap stayed within {max_diff:.1f} points. The card ran a 4-bit copy of the model, which I did not compare with full precision."],
                 "Load does not cost quality. Test the compressed model on your own tasks before you rely on it.",
                 slide(4, "Under load the answers are as good as with one request at a time.",
                       "Share answered correctly against a fixed answer key, Qwen3.8-27B (4-bit)",
                       chart_accuracy(q), SRC, legend_b("One request at a time", "At the waiting limit"))),
         finding("memory", "Finding 5 · Memory", "Memory, not speed, set the limit. My hypothesis did not hold.",
-                [f"On your own card no token is billed, so an agent’s re-sent context is free. I expected more: that the card keeps earlier context in a cache and barely has to work on it again. My hypothesis before the runs: “at least 80 % from cache”.",
-                 f"I measured {pc(cache_lo)} with one agent and {pc(cache_op, 1)} with {t3['operating_point']}. The model’s weights take most of the card’s 32 GB. What is left holds about 95,000 tokens of context, it was full from {t3['operating_point']} agents on, and the server never ran more than 19 requests at once.",
-                 f"A smaller model shows the trade. gpt-oss-20b left five times the memory, served {ot3['operating_point']} agents at once without reaching a limit, and took {pc(ocache)} of its input from cache. It answered {pc(ot3['accuracy_operating'])} of the agent questions correctly, against {pc(t3['accuracy_operating'])}."],
+                [f"On your own card an agent’s re-sent context is free, and I expected at least 80 % of it to come from the card’s cache. I measured {pc(cache_lo)} with one agent and {pc(cache_op, 1)} with {t3['operating_point']}: the model’s weights fill most of the 32 GB, and the server never ran more than 19 requests at once.",
+                 f"The smaller gpt-oss-20b left five times the memory, served {ot3['operating_point']} agents at once and took {pc(ocache)} from cache. It answered {pc(ot3['accuracy_operating'])} of the agent questions correctly, against {pc(t3['accuracy_operating'])}."],
                 "If you own, check the memory left after the model before you look at speed.",
                 slide(5, f"The larger model took {pc(cache_op, 1)} of an agent’s input from cache, the smaller one {pc(ocache)}.",
                       "Share of the agent’s input tokens served from the card’s cache, at low load and at each model’s limit",
                       chart_memory(numbers), SRC)),
         finding("sensitivity", "Finding 6 · What changes the answer", "The answer depends on people, not on the electricity price.",
-                [f"The {r50(be['T3'])} counts only the machine and its electricity. Each bar shows that number with one thing changed. A longer bar means you need more work before owning pays off.",
-                 f"<strong>People</strong> matter most: 5 hours of care a month cost €{fixed_staff - fixed:.2f} a day, more than the machine, and raise the number to {r50(sens['Staff, 5 hours a month']['break_even'])}. <strong>A spare machine</strong> raises it to {r50(sens['A second machine for redundancy']['break_even'])}. <strong>A cloud that bills repeated text at a quarter</strong> raises it to {r50(sens['Cached input billed at a quarter (some providers)']['break_even'])}, because an agent sends the same text again at every step.",
+                [f"Each bar shows the {r50(be['T3'])} with one thing changed. <strong>People</strong> matter most: 5 hours of care a month raise it to {r50(sens['Staff, 5 hours a month']['break_even'])}. <strong>A spare machine</strong> raises it to {r50(sens['A second machine for redundancy']['break_even'])}, <strong>a cloud that bills repeated text at a quarter</strong> to {r50(sens['Cached input billed at a quarter (some providers)']['break_even'])}.",
                  f"<strong>Electricity</strong> barely matters: between €0.15 and €0.35 per kWh, the number stays between {r50(sens['Electricity at 0.15 EUR per kWh']['break_even'])} and {r50(sens['Electricity at 0.35 EUR per kWh']['break_even'])}."],
                 "Before you buy, count the people and the spare machine. The electricity price can wait.",
                 slide(6, "Care and a spare move the line. Electricity barely does.",
@@ -575,12 +716,6 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         [[PLAIN[t], r10(T[t]["tasks_per_hour_operating"]), pc(T[t]["accuracy_operating"]),
           f"€{T[t]['cost']['hardware_only']['api_eur_per_task'] * 1000:.2f}", f"<strong>{r50(be[t])}</strong>", r50(bes[t]),
           r50(T[t]["capacity_per_8h"])] for t in TASKS])
-    teams = table(
-        [("Example (illustrative)", "wrap"), ("Tasks a day", "num"), ("Break-even, hardware only", "num"), ("Break-even, with staff", "num"), ("Cheaper", "")],
-        [["50 people, 20 short questions each", "1,000", r50(be["T2"]), r50(bes["T2"]), "API, by far"],
-         ["50 people, 20 agent questions each", "1,000", r50(be["T3"]), r50(bes["T3"]), "API"],
-         ["250 people, 20 agent questions each", "5,000", r50(be["T3"]), r50(bes["T3"]), "Own machine, if nobody has to look after it"],
-         ["1,000 people, 20 agent questions each", "20,000", r50(be["T3"]), r50(bes["T3"]), "Own machine"]])
     inputs = table(
         [("Input", ""), ("Test machine", "wrap"), ("Where to find yours", "wrap")],
         [["Price of the machine", "€4,423 without VAT, written off over 3 years: €1,474 a year", "the quote for the machine, your write-off period"],
@@ -662,11 +797,9 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         '<div style="margin-top: var(--s5)">'
         '<p class="kicker">Added 16 November 2026 · illustrative, not measured</p>'
         '<h3>Larger hardware, the same formula</h3>'
-        f'<p>A coding agent on a large open model does not fit this card: GLM-5.3 has 753 billion parameters [14]. On data-centre servers the formula stays the same. '
-        f'The fixed cost per working day is {srv[0]["hardware_only"]["fixed_eur_per_working_day"] / rtx["hardware_only"]["fixed_eur_per_working_day"]:.0f} to {srv[1]["hardware_only"]["fixed_eur_per_working_day"] / rtx["hardware_only"]["fixed_eur_per_working_day"]:.0f} times the test machine’s, '
-        f'and at the API a coding task costs {srv[0]["hardware_only"]["api_eur_per_task"] / rtx["hardware_only"]["api_eur_per_task"]:.0f} times an agent question. Owning starts to pay at about {r10(srv[0]["hardware_only"]["break_even"])} to {r10(srv[1]["hardware_only"]["break_even"])} coding tasks a working day: '
-        f'about {srv[0]["developers"]:.0f} to {srv[1]["developers"]:.0f} developers who each make {se["commits_per_active_day"]:.0f} commits a day, as in the case study.</p>'
-        f'{servers_tbl}<p class="caption">{servers_caption}</p></div>')
+        f'<p>A coding agent on a large open model needs a data-centre server, not this card. The same formula puts the break-even at about {r10(srv[0]["hardware_only"]["break_even"])} to {r10(srv[1]["hardware_only"]["break_even"])} coding tasks a working day: '
+        f'about {srv[0]["developers"]:.0f} to {srv[1]["developers"]:.0f} developers who each make {se["commits_per_active_day"]:.0f} commits a day.</p>'
+        f'{servers_tbl}<div class="results" style="margin-top: var(--s3)"><details><summary>How the servers were priced</summary><p class="caption">{servers_caption}</p></details></div></div>')
     details = [f'<details open><summary>Cost and break-even: every task, both models</summary>{cost_tbl}<p class="caption">Break-even = fixed cost per working day ÷ (API price per task − electricity per task). API prices: Qwen3.8-27B €0.45 in and €0.65 out per million tokens, gpt-oss-20b €0.15 and €0.25 [1]. Capacity assumes the card runs at its limit for the whole period.</p></details>',
                f'<details><summary>What moves the agent break-even: 17 changes</summary>{sens_tbl}</details>',
                f'<details><summary>Quality under load, with ranges</summary>{acc_tbl}<p class="caption">The range is a 95 % interval for the difference of two independent shares. Every range includes zero.</p></details>']
@@ -687,7 +820,7 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         <p class="kicker">Experiment 2 · November 2026</p>
         <div class="accent-bar"></div>
         <h1>{TITLE}</h1>
-        <p class="lead">Should a team buy a graphics card for its AI models, or pay a provider per token? I loaded my own card until users would start to wait, scored every answer, and priced the same work at a German cloud. The answer is a number of tasks a day.</p>
+        <p class="lead">Should a team buy a graphics card for its AI models, or pay per token? I loaded my own card until users would start to wait and priced the same work at a German cloud. The answer is a number of tasks a day.</p>
         <ul class="exp-meta">
           <li><strong>2</strong> open models</li>
           <li><strong>4</strong> tasks</li>
@@ -724,10 +857,10 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
       <div class="section-head">
         <p class="kicker">The results on one page</p>
         <h2 id="overview-title">Four kinds of task, three numbers each.</h2>
-        <p class="lead">How many the card finishes in an hour while every user still gets a fast answer, how many of those answers are correct, and the number per working day from which owning is cheaper than the API.</p>
+        <p class="lead">Tasks an hour with every user still served fast, the share answered correctly, and the tasks a day from which owning beats the API.</p>
       </div>
       {overview}
-      <p class="caption" style="margin-top: var(--s3)">Qwen3.8-27B on one RTX 5090, against the list price of the same model at a German cloud [1]. “Per hour” and “correct” are measured at the highest load at which users still get a fast answer; “with staff” counts 5 staff hours a month. The fastest task pays off last: what decides is the price the API charges for one task.</p>
+      <p class="caption" style="margin-top: var(--s3)">Qwen3.8-27B on one RTX 5090, against the same model’s list price at a German cloud [1]. “With staff” adds 5 staff hours a month.</p>
     </div>
   </section>
 
@@ -745,14 +878,14 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         <p class="lead">The formula has one line. Everything in it is a number you can look up.</p>
       </div>
       <p class="cite">Break-even tasks per working day = cost of owning per working day ÷ (API price per task − electricity per task)</p>
+      {calculator(numbers)}
       <div style="margin-top: var(--s4)">{inputs}</div>
-      <div style="margin-top: var(--s4)">{teams}</div>
       {servers_block}
       <ul class="bullets" style="margin-top: var(--s4)">
         <li><strong>Below the break-even:</strong> use the API. It costs nothing when nobody asks.</li>
-        <li><strong>Above it:</strong> own, and fill the quiet hours with batch work, such as long documents at night.</li>
-        <li><strong>Watch your agents.</strong> They multiply tokens per task and an API bills every one, so they are what moves a team towards the line.</li>
-        <li><strong>If your data may not leave the building,</strong> owning is the only option, and the question becomes whether you can keep the card busy. The cloud in this comparison is already German.</li>
+        <li><strong>Above it:</strong> own, and fill the quiet hours with batch work.</li>
+        <li><strong>Watch your agents.</strong> They multiply tokens per task, and an API bills every one.</li>
+        <li><strong>If your data may not leave the building,</strong> owning is the only option. The cloud here is already German.</li>
       </ul>
     </div>
   </section>
@@ -762,17 +895,17 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
       <div class="section-head">
         <p class="kicker">How it was measured</p>
         <h2 id="setup-title">One card, loaded step by step, every answer scored.</h2>
-        <p class="lead">A program plays the users. It keeps a fixed number of requests in flight, from 1 to 64, for 4 minutes per run, and every answer is checked against a key.</p>
+        <p class="lead">A program plays the users, and every answer is checked against a key.</p>
       </div>
       {tasks_tbl}
       {models_tbl}
       <ul class="bullets" style="margin-top: var(--s4)">
-        <li><strong>Hardware.</strong> One NVIDIA RTX 5090 with 32 GB in my own PC, bought privately. No sponsor, no employer hardware, no employer data. This is not a recommendation to buy this card: the method works for any card.</li>
-        <li><strong>Load.</strong> 1, 4, 16, 32 and 64 requests at once, then two levels in between where the limit lies, two runs per level, 45 seconds warm-up and 240 seconds measured.</li>
-        <li><strong>The waiting limit.</strong> A call counts as good when its first word arrives within 2 seconds and the answer then flows at 10 words a second or more [4]. A load level counts only if 99 % of its calls are good.</li>
-        <li><strong>Quality.</strong> Every answer is compared with a fixed key. No AI judges another AI. An answer cut off at the length limit counts as wrong.</li>
-        <li><strong>Prices.</strong> The API side is the public price list of STACKIT, a German cloud, for the same open models, without VAT [1]. I did not run anything against that API. Electricity is the German business price [2], labour the German average cost per hour worked [3].</li>
-        <li><strong>Power.</strong> Read at the wall by a smart plug, for the whole machine: {q['idle_w']:.0f} W when idle with the model loaded, 500 to 740 W under load.</li>
+        <li><strong>Hardware.</strong> One NVIDIA RTX 5090 with 32 GB in my own PC, bought privately: no sponsor, no employer hardware or data.</li>
+        <li><strong>Load.</strong> 1 to 64 requests at once, two runs per level, 4 minutes measured after 45 seconds of warm-up.</li>
+        <li><strong>The waiting limit.</strong> A level counts only if 99 % of calls get their first word within 2 seconds and then 10 words a second or more [4].</li>
+        <li><strong>Quality.</strong> Every answer is compared with a fixed key. An answer cut off at the length limit counts as wrong.</li>
+        <li><strong>Prices.</strong> The API side is STACKIT’s public list price for the same models, without VAT [1]; electricity is the German business price [2], labour the German average cost per hour [3].</li>
+        <li><strong>Power.</strong> Read at the wall for the whole machine: {q['idle_w']:.0f} W idle with the model loaded, 500 to 740 W under load.</li>
       </ul>
     </div>
   </section>
@@ -782,7 +915,7 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
       <div class="section-head">
         <p class="kicker">Hypotheses</p>
         <h2 id="hyp-title">Five hypotheses, set before the runs. Two did not hold.</h2>
-        <p class="lead">I fixed the method and the hypotheses before the card ran, so that I could not choose the story afterwards. Both hypotheses that did not hold overrated the owned card.</p>
+        <p class="lead">Written down before the card ran, so I could not choose the story afterwards. Both that did not hold overrated the owned card.</p>
       </div>
       {hyp}
     </div>
@@ -808,14 +941,14 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         <h2 id="limits-title">A measurement of this setup, not of GPUs in general.</h2>
       </div>
       <ul class="bullets">
-        <li><strong>One machine, one night.</strong> One consumer card, two runs per load level. Another card, driver or software version will give other capacities.</li>
-        <li><strong>The limit of 19 requests is specific.</strong> It comes from how this version of the serving software divides the card’s memory for this model. Another version may fit more.</li>
-        <li><strong>A compressed model.</strong> The 27B model ran as a 4-bit copy and was not compared with full precision.</li>
-        <li><strong>List prices, no API run.</strong> The API side is a price list applied to the tokens my card counted. Its speed and its answers were not measured.</li>
-        <li><strong>Even load.</strong> The test keeps a constant number of requests in flight. Real traffic comes in bursts, which lowers what a card can take.</li>
-        <li><strong>Benchmarks stand in for work.</strong> The tasks have answer keys, real business tasks rarely do. The agent task is synthetic.</li>
-        <li><strong>Not a test of coding agents on large models.</strong> GLM-5.3, an open model built for coding agents, has 753 billion parameters [14]. At 4 bits its weights alone take about 380 GB, 12 times this card’s memory and more than five 80 GB data-centre cards hold, so owning it means a multi-card server. Its API costs more too: $1.40 per million input tokens, $0.26 cached, $4.40 output [15], against €0.45 and €0.65 here [1]. Coding agents send the same files again and again, so the cache price matters: in one case study, 99.3 % of the input came from cache and the API bill fell by 88.6 % [16]. The formula holds, but the fixed cost and the price per task both rise, so this break-even needs its own measurement.</li>
-        <li><strong>A simple cost model.</strong> No cost of capital, no resale value, no spare machine, no room or cooling in the base case. The table under “Full results” shows what each would change.</li>
+        <li><strong>One machine, one night.</strong> Another card, driver or software version gives other capacities.</li>
+        <li><strong>The limit of 19 requests is specific</strong> to how this software version divides the card’s memory.</li>
+        <li><strong>A compressed model.</strong> 4-bit, not compared with full precision.</li>
+        <li><strong>List prices, no API run.</strong> The API’s speed and answers were not measured.</li>
+        <li><strong>Even load.</strong> Real traffic comes in bursts, which lowers what a card can take.</li>
+        <li><strong>Benchmarks stand in for work.</strong> Real tasks rarely have answer keys, and the agent task is synthetic.</li>
+        <li><strong>Not a test of coding agents on large models.</strong> GLM-5.3 has 753 billion parameters [14] and needs a multi-card server, so the server example above is illustrative.</li>
+        <li><strong>A simple cost model.</strong> No cost of capital, resale value, spare machine, room or cooling in the base case; “Full results” shows what each changes.</li>
       </ul>
     </div>
   </section>
@@ -837,7 +970,7 @@ def build(numbers: dict, chrome: dict, video: str | None) -> str:
         <h2 id="cite-title">Check it, rerun it, cite it.</h2>
       </div>
       <div>
-        <p>The test code, the answer keys and the raw results, one row per run, per answer and per call, are on GitHub, together with a technical report that adds the full method, confidence intervals, the hypotheses as written before the runs and every deviation from the plan. One command prices the same measurements with your machine and your provider. Questions and corrections are welcome there as issues.</p>
+        <p>The test code, answer keys and raw results are on GitHub, with a technical report: the full method, confidence intervals, the hypotheses as written and every deviation from the plan. Questions and corrections are welcome there as issues.</p>
         <div class="actions" style="margin-top: var(--s3)">
           <a class="btn" href="{REPO}">
             <svg class="icon icon--sm" aria-hidden="true"><use href="/assets/img/icons.svg#github"></use></svg>
